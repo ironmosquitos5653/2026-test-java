@@ -55,7 +55,7 @@ public class PhotonVisionSubsystem extends SubsystemBase {
     leftCamera = new PhotonCamera(leftCameraName);
     rightCamera = new PhotonCamera(rightCameraName);
 
-    fieldLayout = AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeAndyMark);
+    fieldLayout = AprilTagFieldLayout.loadField(AprilTagFields.k2026RebuiltAndymark);
 
     m_driveSubsystem = driveSubsystem;
     ShuffleboardTab tab = Shuffleboard.getTab("Vision");
@@ -100,7 +100,9 @@ public class PhotonVisionSubsystem extends SubsystemBase {
                 + "  -  "
                 + Units.radiansToDegrees(c2t.getRotation().getAngle()));
         Optional<Pose3d> tagPose = fieldLayout.getTagPose(tar.getFiducialId());
-
+        if (tagPose.isEmpty() || tar.getPoseAmbiguity() > 0.15) {
+          continue;
+        }
         Pose2d p =
             PhotonUtils.estimateFieldToRobotAprilTag(c2t, tagPose.get(), cameraTransform.inverse())
                 .toPose2d();
