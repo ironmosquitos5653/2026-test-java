@@ -4,14 +4,35 @@
 
 package frc.robot.subsystems;
 
+import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.spark.SparkFlex;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
+
 public class IntakeSubsystem extends SubsystemBase {
-  /** Creates a new IntakeSubsystem. */
-  public IntakeSubsystem() {}
+
+  private static final int intakeMotorCANId = 0;
+  private static final int intakeDeployMotorCANId = 0;
+
+  private SparkFlex intakeMotor;
+  private SparkFlex intakeDeployMotor;
+
+
+  public IntakeSubsystem() {
+    intakeMotor = new SparkFlex(intakeMotorCANId, MotorType.kBrushless);
+    intakeDeployMotor = new SparkFlex(intakeDeployMotorCANId, MotorType.kBrushless);
+  }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+  }
+
+  public void setSpeed(double speed) {
+    intakeMotor.set(speed);
+  }
+
+  public void setDeploySpeed(double speed) {
+    intakeDeployMotor.set(-speed);
   }
 }
