@@ -4,10 +4,9 @@
 
 package frc.robot.subsystems;
 
-import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkFlex;
+import com.revrobotics.spark.SparkLowLevel.MotorType;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-
 
 public class IntakeSubsystem extends SubsystemBase {
 
@@ -16,7 +15,6 @@ public class IntakeSubsystem extends SubsystemBase {
 
   private SparkFlex intakeMotor;
   private SparkFlex intakeDeployMotor;
-
 
   public IntakeSubsystem() {
     intakeMotor = new SparkFlex(intakeMotorCANId, MotorType.kBrushless);

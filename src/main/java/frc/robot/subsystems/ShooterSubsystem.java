@@ -16,7 +16,6 @@ public class ShooterSubsystem extends SubsystemBase {
   private static final int advance1MotorCANId = 14;
   private static final int advance2MotorCANId = 15;
 
-
   private SparkFlex shooter1Motor;
   private SparkFlex shooter2Motor;
   private SparkFlex shooter3Motor;

@@ -12,17 +12,21 @@ public class ClimbCommand extends Command {
   ClimbSubsystem m_climbSubsystem;
   double m_speed;
 
-
   public ClimbCommand(ClimbSubsystem climbSubsystem, boolean up) {
     m_climbSubsystem = climbSubsystem;
     m_speed = up ? 1.0 : -1.0;
   }
-   public ClimbCommand(ClimbSubsystem climbSubsystem, double speed) {
+
+  public ClimbCommand(ClimbSubsystem climbSubsystem, double speed) {
     m_climbSubsystem = climbSubsystem;
     m_speed = speed;
   }
 
-  // Called when the command is initially scheduled.
+  public ClimbCommand(ClimbSubsystem m_ClimbSubsystem2) {
+    //TODO Auto-generated constructor stub
+}
+
+// Called when the command is initially scheduled.
   @Override
   public void initialize() {}
 

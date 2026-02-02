@@ -36,14 +36,14 @@ public class PhotonVisionSubsystem extends SubsystemBase {
   private Transform3d leftCameraTransform =
       new Transform3d(
           new Translation3d(
-              Units.inchesToMeters(-14), Units.inchesToMeters(10.5), Units.inchesToMeters(0)),
-          new Rotation3d(0, 0, Units.degreesToRadians(-30)));
+              Units.inchesToMeters(-14), Units.inchesToMeters(-12.5), Units.inchesToMeters(0)),
+          new Rotation3d(0, Units.degreesToRadians(30), Units.degreesToRadians(165)));
 
   private Transform3d rightCameraTransform =
       new Transform3d(
           new Translation3d(
-              Units.inchesToMeters(-14), Units.inchesToMeters(-10.5), Units.inchesToMeters(0)),
-          new Rotation3d(0, 0, Units.degreesToRadians(30)));
+              Units.inchesToMeters(-14), Units.inchesToMeters(12.5), Units.inchesToMeters(0)),
+          new Rotation3d(0, Units.degreesToRadians(30), Units.degreesToRadians(-165)));
 
   private Pose2d leftPose2d;
   private Pose2d rightPose2d;
@@ -75,8 +75,10 @@ public class PhotonVisionSubsystem extends SubsystemBase {
 
   public void updateCameras() {
     leftPose2d = updateCamera(leftCamera, leftCameraTransform);
-    rightPose2d = updateCamera(rightCamera, rightCameraTransform);
+    if (leftPose2d != null) leftPosition = getFomattedPose(leftPose2d);
 
+    rightPose2d = updateCamera(rightCamera, rightCameraTransform);
+    if (rightPose2d != null) rightPosition = getFomattedPose(rightPose2d);
     updateField();
     count++;
   }
@@ -131,12 +133,16 @@ public class PhotonVisionSubsystem extends SubsystemBase {
     field2d.setRobotPose(m_driveSubsystem.getPose());
   }
 
+  String leftPosition;
+
   public String getLeftPosition() {
-    return getFomattedPose(leftPose2d);
+    return leftPosition = "(N/A)";
   }
 
+  String rightPosition = "(N/A)";
+
   public String getRightPosition() {
-    return getFomattedPose(rightPose2d);
+    return rightPosition;
   }
 
   private String getFomattedPose() {

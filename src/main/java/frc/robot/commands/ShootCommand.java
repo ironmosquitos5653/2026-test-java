@@ -17,14 +17,16 @@ public class ShootCommand extends Command {
   Timer timer = new Timer();
 
   /** Creates a new ShootCommand. */
-  public ShootCommand(ShooterSubsystem shooterSubsystem, double speed1, double speed2, double speed3) {
+  public ShootCommand(
+      ShooterSubsystem shooterSubsystem, double speed1, double speed2, double speed3) {
     m_ShooterSubsystem = shooterSubsystem;
-    m_speed1 = speed1;
-    m_speed2 = speed2;
-    m_speed3 = speed3;
   }
 
-  // Called when the command is initially scheduled.
+  public ShootCommand(ShooterSubsystem m_ShooterSubsystem2) {
+    //TODO Auto-generated constructor stub
+}
+
+// Called when the command is initially scheduled.
   @Override
   public void initialize() {
     timer.reset();
@@ -37,10 +39,10 @@ public class ShootCommand extends Command {
   @Override
   public void execute() {
     m_ShooterSubsystem.setShootSpeed(m_speed1);
-    //auto alignment code would go here
-    //set hood position here
-    //turn on advance motors
-    //intake in
+    // auto alignment code would go here
+    // set hood position here
+    // turn on advance motors
+    // intake in
   }
 
   // Called once the command ends or is interrupted.
