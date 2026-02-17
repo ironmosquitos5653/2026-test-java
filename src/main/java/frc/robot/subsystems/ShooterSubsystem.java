@@ -10,11 +10,11 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class ShooterSubsystem extends SubsystemBase {
 
-  private static final int shooterMotorCANId = 11;
-  private static final int shooter2MotorCANId = 12;
-  private static final int shooter3MotorCANId = 13;
-  private static final int advance1MotorCANId = 14;
-  private static final int advance2MotorCANId = 15;
+  private static final int shooterMotorCANId = 10;
+  private static final int shooter2MotorCANId = 11;
+  private static final int shooter3MotorCANId = 12;
+  private static final int advance1MotorCANId = 13;
+  private static final int advance2MotorCANId = 14;
 
   private SparkFlex shooter1Motor;
   private SparkFlex shooter2Motor;

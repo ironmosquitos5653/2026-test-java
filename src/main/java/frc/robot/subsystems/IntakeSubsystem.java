@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class IntakeSubsystem extends SubsystemBase {
 
   private static final int intakeMotorCANId = 0;
-  private static final int intakeDeployMotorCANId = 0;
+  private static final int intakeDeployMotorCANId = 9;
 
   private SparkFlex intakeMotor;
   private SparkFlex intakeDeployMotor;
