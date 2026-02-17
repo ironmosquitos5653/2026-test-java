@@ -5,9 +5,21 @@
     "data": {
       "commands": [
         {
+          "type": "named",
+          "data": {
+            "name": "Shoot"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "BRT1"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "IntakeOn"
           }
         },
         {
@@ -17,9 +29,21 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "IntakeOff"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "BRT3"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot"
           }
         },
         {
@@ -29,27 +53,9 @@
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "BRT5"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "BRT6"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "BRT7"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "BRT8"
+            "name": "ClimbUp"
           }
         }
       ]
