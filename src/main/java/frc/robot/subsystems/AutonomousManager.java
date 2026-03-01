@@ -5,20 +5,23 @@ package frc.robot.subsystems;
 
 import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.commands.ClimbCommand;
-import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.ShootCommand;
 import frc.robot.subsystems.drive.Drive;
 
 /** Add your docs here. */
 public class AutonomousManager {
- Drive m_Drive;
- ShooterSubsystem m_ShooterSubsystem;
- ClimbSubsystem m_ClimbSubsystem;
- IntakeSubsystem m_IntakeSubsystem;
+  Drive m_Drive;
+  ShooterSubsystem m_ShooterSubsystem;
+  ClimbSubsystem m_ClimbSubsystem;
+  IntakeSubsystem m_IntakeSubsystem;
 
   public AutonomousManager(
-      Drive drive,ShooterSubsystem shooterSubsystem, ClimbSubsystem climbSubsystem, IntakeSubsystem intakeSubsystem) {
+      Drive drive,
+      ShooterSubsystem shooterSubsystem,
+      ClimbSubsystem climbSubsystem,
+      IntakeSubsystem intakeSubsystem) {
     m_Drive = drive;
     m_ClimbSubsystem = climbSubsystem;
     m_IntakeSubsystem = intakeSubsystem;
@@ -26,10 +29,9 @@ public class AutonomousManager {
   }
 
   public void initialize() {
-    register("IntakeOn", new IntakeCommand(m_IntakeSubsystem));
-    register("IntakeOff", new IntakeCommand(m_IntakeSubsystem));
-    register("Shoot", new ShootCommand(m_ShooterSubsystem));
-    register("ShootStop", new ShootCommand(m_ShooterSubsystem));
+    register("IntakeOn", Commands.runOnce(() -> m_IntakeSubsystem.out()));
+    register("Shoot", new ShootCommand(m_ShooterSubsystem, m_IntakeSubsystem, m_Drive));
+    register("ShootStop", new ShootCommand(m_ShooterSubsystem, m_IntakeSubsystem, m_Drive));
     register("ClimbUp", new ClimbCommand(m_ClimbSubsystem));
   }
 

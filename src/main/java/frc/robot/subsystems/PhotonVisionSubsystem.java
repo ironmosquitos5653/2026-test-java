@@ -36,14 +36,14 @@ public class PhotonVisionSubsystem extends SubsystemBase {
   private Transform3d leftCameraTransform =
       new Transform3d(
           new Translation3d(
-              Units.inchesToMeters(-14), Units.inchesToMeters(-12.5), Units.inchesToMeters(0)),
-          new Rotation3d(0, Units.degreesToRadians(30), Units.degreesToRadians(165)));
+              Units.inchesToMeters(-14), Units.inchesToMeters(11), Units.inchesToMeters(0)),
+          new Rotation3d(0, Units.degreesToRadians(10), Units.degreesToRadians(15)));
 
   private Transform3d rightCameraTransform =
       new Transform3d(
           new Translation3d(
-              Units.inchesToMeters(-14), Units.inchesToMeters(12.5), Units.inchesToMeters(0)),
-          new Rotation3d(0, Units.degreesToRadians(30), Units.degreesToRadians(-165)));
+              Units.inchesToMeters(-14), Units.inchesToMeters(-11), Units.inchesToMeters(0)),
+          new Rotation3d(0, Units.degreesToRadians(10), Units.degreesToRadians(-15)));
 
   private Pose2d leftPose2d;
   private Pose2d rightPose2d;
@@ -75,10 +75,16 @@ public class PhotonVisionSubsystem extends SubsystemBase {
 
   public void updateCameras() {
     leftPose2d = updateCamera(leftCamera, leftCameraTransform);
-    if (leftPose2d != null) leftPosition = getFomattedPose(leftPose2d);
+    if (leftPose2d != null) {
+      leftPosition = getFomattedPose(leftPose2d);
+      SmartDashboard.putString("LEft:" + fiducial, leftPosition);
+    }
 
     rightPose2d = updateCamera(rightCamera, rightCameraTransform);
-    if (rightPose2d != null) rightPosition = getFomattedPose(rightPose2d);
+    if (rightPose2d != null) {
+      rightPosition = getFomattedPose(rightPose2d);
+      SmartDashboard.putString("Right:" + fiducial, rightPosition);
+    }
     updateField();
     count++;
   }
@@ -88,38 +94,42 @@ public class PhotonVisionSubsystem extends SubsystemBase {
     Pose2d latest = null;
     List<PhotonPipelineResult> results = camera.getAllUnreadResults();
     for (var result : results) {
-      PhotonTrackedTarget tar = result.getBestTarget();
+      if (result.hasTargets()) {
+        PhotonTrackedTarget tar = result.getBestTarget();
 
-      if (tar != null) {
-        Transform3d c2t = tar.getBestCameraToTarget();
-        SmartDashboard.putString(
-            camera.getName() + "-cam1Target",
-            c2t.getX()
-                + " - "
-                + c2t.getY()
-                + " - "
-                + c2t.getZ()
-                + "  -  "
-                + Units.radiansToDegrees(c2t.getRotation().getAngle()));
-        Optional<Pose3d> tagPose = fieldLayout.getTagPose(tar.getFiducialId());
-        if (tagPose.isEmpty() || tar.getPoseAmbiguity() > 0.15) {
-          continue;
+        if (tar != null) {
+          Transform3d c2t = tar.getBestCameraToTarget();
+          SmartDashboard.putString(
+              camera.getName() + "-cam1Target",
+              c2t.getX()
+                  + " - "
+                  + c2t.getY()
+                  + " - "
+                  + c2t.getZ()
+                  + "  -  "
+                  + Units.radiansToDegrees(c2t.getRotation().getAngle()));
+          Optional<Pose3d> tagPose = fieldLayout.getTagPose(tar.getFiducialId());
+          fiducial = tar.getFiducialId() + "";
+          if (tagPose.isEmpty() || tar.getPoseAmbiguity() > 0.15) {
+            continue;
+          }
+          Pose2d p =
+              PhotonUtils.estimateFieldToRobotAprilTag(
+                      c2t, tagPose.get(), cameraTransform.inverse())
+                  .toPose2d();
+
+          SmartDashboard.putString(
+              camera.getName() + "-cam",
+              p.getX()
+                  + " - "
+                  + p.getY()
+                  + " - "
+                  + Units.radiansToDegrees(p.getRotation().getRadians()));
+
+          latest = p;
+          m_driveSubsystem.addVisionMeasurement(
+              p, result.getTimestampSeconds(), VecBuilder.fill(.0, .1, .1));
         }
-        Pose2d p =
-            PhotonUtils.estimateFieldToRobotAprilTag(c2t, tagPose.get(), cameraTransform.inverse())
-                .toPose2d();
-
-        SmartDashboard.putString(
-            camera.getName() + "-cam",
-            p.getX()
-                + " - "
-                + p.getY()
-                + " - "
-                + Units.radiansToDegrees(p.getRotation().getRadians()));
-
-        latest = p;
-        m_driveSubsystem.addVisionMeasurement(
-            p, result.getTimestampSeconds(), VecBuilder.fill(.0, .1, .1));
       }
     }
     return latest;
@@ -133,13 +143,14 @@ public class PhotonVisionSubsystem extends SubsystemBase {
     field2d.setRobotPose(m_driveSubsystem.getPose());
   }
 
-  String leftPosition;
+  String leftPosition = "(N/A)";
 
   public String getLeftPosition() {
-    return leftPosition = "(N/A)";
+    return leftPosition;
   }
 
   String rightPosition = "(N/A)";
+  String fiducial = "nope";
 
   public String getRightPosition() {
     return rightPosition;

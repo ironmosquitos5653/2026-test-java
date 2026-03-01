@@ -8,15 +8,20 @@
 package frc.robot;
 
 import com.pathplanner.lib.auto.AutoBuilder;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.commands.AimCommand;
+import frc.robot.commands.ClimbCommand;
 import frc.robot.commands.DriveCommands;
+import frc.robot.commands.IntakeDeployCommand;
+import frc.robot.commands.ShootCommand;
+import frc.robot.subsystems.ClimbSubsystem;
+import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.PhotonVisionSubsystem;
+import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.GyroIO;
 import frc.robot.subsystems.drive.GyroIOPigeon2;
@@ -32,9 +37,12 @@ import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
  * subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
-  // Subsystems
+
   private final Drive drive;
   private final PhotonVisionSubsystem photonVisionSubsystem;
+  private final ShooterSubsystem shooterSubsystem;
+  private final IntakeSubsystem intakeSubsystem;
+  private final ClimbSubsystem climbSubsystem;
 
   // Controller
   private final CommandXboxController controller = new CommandXboxController(0);
@@ -81,6 +89,9 @@ public class RobotContainer {
     }
 
     photonVisionSubsystem = new PhotonVisionSubsystem(drive);
+    shooterSubsystem = new ShooterSubsystem();
+    intakeSubsystem = new IntakeSubsystem();
+    climbSubsystem = new ClimbSubsystem();
 
     // Set up auto routines
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
@@ -105,29 +116,13 @@ public class RobotContainer {
             () -> -controller.getLeftX(),
             () -> -controller.getRightX()));
 
-    // Lock to 0° when A button is held
-    controller
-        .a()
-        .whileTrue(
-            DriveCommands.joystickDriveAtAngle(
-                drive,
-                () -> -controller.getLeftY(),
-                () -> -controller.getLeftX(),
-                () -> Rotation2d.kZero));
-
-    // Switch to X pattern when X button is pressed
     controller.x().onTrue(Commands.runOnce(drive::stopWithX, drive));
-
-    // Reset gyro to 0° when B button is pressed
-    controller
-        .b()
-        .onTrue(
-            Commands.runOnce(
-                    () ->
-                        drive.setPose(
-                            new Pose2d(drive.getPose().getTranslation(), Rotation2d.kZero)),
-                    drive)
-                .ignoringDisable(true));
+    controller.rightBumper().onTrue(new ShootCommand(shooterSubsystem, intakeSubsystem, drive));
+    controller.leftBumper().onTrue(Commands.runOnce(intakeSubsystem::toggle, intakeSubsystem));
+    controller.povUp().onTrue(new ClimbCommand(climbSubsystem));
+    controller.a().whileTrue(new IntakeDeployCommand(intakeSubsystem, shooterSubsystem, false));
+    controller.b().whileTrue(new IntakeDeployCommand(intakeSubsystem, shooterSubsystem, true));
+    controller.y().whileTrue(new AimCommand(drive));
   }
 
   /**

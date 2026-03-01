@@ -3,16 +3,16 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.514,
-        "y": 1.198
+        "x": 7.537423076923078,
+        "y": 1.1977179487179501
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.653705128205129,
-        "y": 1.6163333333333334
+        "x": 7.677128205128207,
+        "y": 1.6160512820512836
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "BRT1.2"
     },
     {
       "anchor": {
@@ -48,7 +48,7 @@
   "folder": null,
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -108.08160913058386
+    "rotation": -103.32453126189093
   },
   "useDefaultConstraints": true
 }
