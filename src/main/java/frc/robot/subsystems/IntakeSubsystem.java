@@ -23,7 +23,7 @@ public class IntakeSubsystem extends SubsystemBase {
   public IntakeSubsystem() {
     intakeMotor = new SparkFlex(intakeMotorCANId, MotorType.kBrushless);
     intakeDeployMotor = new SparkFlex(intakeDeployMotorCANId, MotorType.kBrushless);
-    // setCurrentLimit(60);
+    setCurrentLimit(60);
   }
 
   @Override
@@ -43,12 +43,12 @@ public class IntakeSubsystem extends SubsystemBase {
   }
 
   public void in() {
-    // intakeDeployMotor.set(1);
+    intakeDeployMotor.set(1);
     intakeMotor.set(0);
   }
 
   public void out() {
-    // intakeDeployMotor.set(-1);
+    intakeDeployMotor.set(-1);
     intakeMotor.set(-1);
   }
 
@@ -63,4 +63,8 @@ public class IntakeSubsystem extends SubsystemBase {
   public void setDeploySpeed(double speed) {
     intakeDeployMotor.set(speed);
   }
+
+  /*/ public void intakeSpeed(double speed){
+  intakeMotor.set(speed);
+  }*/
 }

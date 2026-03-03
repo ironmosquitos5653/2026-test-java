@@ -23,6 +23,10 @@ public class IntakeDeployCommand extends Command {
     addRequirements(m_IntakeSubsystem);
   }
 
+  public IntakeDeployCommand(IntakeSubsystem intakeSubsystem, boolean b) {
+    // TODO Auto-generated constructor stub
+  }
+
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {}
@@ -31,11 +35,11 @@ public class IntakeDeployCommand extends Command {
   @Override
   public void execute() {
     if (m_in) {
-      // m_IntakeSubsystem.setDeploySpeed(-.5);
-      m_ShooterSubsystem.setHoodSpeed(-.5);
+      m_IntakeSubsystem.setDeploySpeed(-.25);
+      // m_ShooterSubsystem.setHoodSpeed(-.5);
     } else {
-      // m_IntakeSubsystem.setDeploySpeed(.5);
-      m_ShooterSubsystem.setHoodSpeed(.5);
+      m_IntakeSubsystem.setDeploySpeed(.25);
+      // m_ShooterSubsystem.setHoodSpeed(.5);
     }
   }
 
@@ -43,7 +47,7 @@ public class IntakeDeployCommand extends Command {
   @Override
   public void end(boolean interrupted) {
     m_IntakeSubsystem.setDeploySpeed(0);
-    m_ShooterSubsystem.setHoodSpeed(0);
+    // m_ShooterSubsystem.setHoodSpeed(0);
   }
 
   // Returns true when the command should end.

@@ -116,9 +116,10 @@ public class RobotContainer {
             () -> -controller.getLeftX(),
             () -> -controller.getRightX()));
 
-    controller.x().onTrue(Commands.runOnce(drive::stopWithX, drive));
+    // controller.x().onTrue(Commands.runOnce(drive::stopWithX, drive));
     controller.rightBumper().onTrue(new ShootCommand(shooterSubsystem, intakeSubsystem, drive));
     controller.leftBumper().onTrue(Commands.runOnce(intakeSubsystem::toggle, intakeSubsystem));
+    // lef bumper brings in super duper fast :(
     controller.povUp().onTrue(new ClimbCommand(climbSubsystem));
     controller.a().whileTrue(new IntakeDeployCommand(intakeSubsystem, shooterSubsystem, false));
     controller.b().whileTrue(new IntakeDeployCommand(intakeSubsystem, shooterSubsystem, true));

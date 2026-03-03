@@ -71,7 +71,7 @@ public class ShootCommand extends Command {
     // aim();
     setHood(distance);
     setShootSpeed(distance);
-    if (timer.hasElapsed(.75)) {
+    if (timer.hasElapsed(3)) {
       if (!dumped) {
         m_ShooterSubsystem.dump();
         dumped = true;
@@ -91,7 +91,7 @@ public class ShootCommand extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return timer.hasElapsed(5);
+    return timer.hasElapsed(10);
   }
 
   public double geDistance() {
@@ -118,12 +118,12 @@ public class ShootCommand extends Command {
   }
 
   public void setHood(double distance) {
-    m_ShooterSubsystem.setHoodPosition(hoodPosition);
+    m_ShooterSubsystem.setHoodPosition(0.084);
     // up .6
     // down .44
   }
 
   public void setShootSpeed(double distance) {
-    m_ShooterSubsystem.setShootSpeed(speed);
+    m_ShooterSubsystem.setShootSpeed(4500);
   }
 }
