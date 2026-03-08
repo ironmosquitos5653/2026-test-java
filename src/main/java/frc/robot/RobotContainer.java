@@ -107,8 +107,8 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    // Default command, normal field-relative drive
 
+    // Default command, normal field-relative drive
     drive.setDefaultCommand(
         DriveCommands.joystickDrive(
             drive,
@@ -116,13 +116,16 @@ public class RobotContainer {
             () -> -controller.getLeftX(),
             () -> -controller.getRightX()));
 
-    // controller.x().onTrue(Commands.runOnce(drive::stopWithX, drive));
-    controller.rightBumper().onTrue(new ShootCommand(shooterSubsystem, intakeSubsystem, drive));
-    controller.leftBumper().onTrue(Commands.runOnce(intakeSubsystem::toggle, intakeSubsystem));
+    // x wheels
+    controller.x().onTrue(Commands.runOnce(drive::stopWithX, drive));
+
+    controller.rightBumper().whileTrue(new ShootCommand(shooterSubsystem, intakeSubsystem, drive, false));
+    controller.leftBumper().onTrue(new IntakeDeployCommand(intakeSubsystem));
+
     // lef bumper brings in super duper fast :(
-    controller.povUp().onTrue(new ClimbCommand(climbSubsystem));
     controller.a().whileTrue(new IntakeDeployCommand(intakeSubsystem, shooterSubsystem, false));
     controller.b().whileTrue(new IntakeDeployCommand(intakeSubsystem, shooterSubsystem, true));
+
     controller.y().whileTrue(new AimCommand(drive));
   }
 

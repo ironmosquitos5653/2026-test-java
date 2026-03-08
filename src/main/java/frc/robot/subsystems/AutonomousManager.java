@@ -30,8 +30,7 @@ public class AutonomousManager {
 
   public void initialize() {
     register("IntakeOn", Commands.runOnce(() -> m_IntakeSubsystem.out()));
-    register("Shoot", new ShootCommand(m_ShooterSubsystem, m_IntakeSubsystem, m_Drive));
-    register("ShootStop", new ShootCommand(m_ShooterSubsystem, m_IntakeSubsystem, m_Drive));
+    register("Shoot", new ShootCommand(m_ShooterSubsystem, m_IntakeSubsystem, m_Drive, true));
     register("ClimbUp", new ClimbCommand(m_ClimbSubsystem));
   }
 

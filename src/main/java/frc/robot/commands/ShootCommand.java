@@ -31,20 +31,16 @@ public class ShootCommand extends Command {
 
   private double hoodPosition = 0;
   private double speed = 4000;
-  /*
-   *
-   * @15 feet .091 hood, 4200 rpm
-   * @9 feet  .65 hood, 3850 rpm
-   * @8.5 feet .067 hood 4000 rpm
-   * @4 feet 0.037, 3500 rpm
-   */
+
+  private boolean m_timed;
 
   /** Creates a new ShootCommand. */
   public ShootCommand(
-      ShooterSubsystem shooterSubsystem, IntakeSubsystem intakeSubsystem, Drive drive) {
+      ShooterSubsystem shooterSubsystem, IntakeSubsystem intakeSubsystem, Drive drive, boolean timed) {
     m_ShooterSubsystem = shooterSubsystem;
     m_IntakeSubsystem = intakeSubsystem;
     m_drive = drive;
+    m_timed = timed;
   }
 
   // Called when the command is initially scheduled.
@@ -68,7 +64,7 @@ public class ShootCommand extends Command {
   public void execute() {
     // m_IntakeSubsystem.in();
     double distance = 3; // getDistance();
-    // aim();
+    aim();
     setHood(distance);
     setShootSpeed(distance);
     if (timer.hasElapsed(3)) {
@@ -91,6 +87,9 @@ public class ShootCommand extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+    // shoot while held.
+    if (! m_timed) return false;
+
     return timer.hasElapsed(10);
   }
 
@@ -110,11 +109,11 @@ public class ShootCommand extends Command {
   }
 
   public void aim() {
-    // m_drive.stopWithX();
+    m_drive.stopWithX();
 
-    double omega = m_drive.getTurnToPoseOutput(getTargetPose2d(), turnController);
+    //double omega = m_drive.getTurnToPoseOutput(getTargetPose2d(), turnController);
     // No translation, rotate in place using chassis speeds
-    m_drive.runVelocity(new ChassisSpeeds(0.0, 0.0, omega));
+    //m_drive.runVelocity(new ChassisSpeeds(0.0, 0.0, omega));
   }
 
   public void setHood(double distance) {
