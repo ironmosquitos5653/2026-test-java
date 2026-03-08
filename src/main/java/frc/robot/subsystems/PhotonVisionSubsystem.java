@@ -18,9 +18,13 @@ import frc.robot.subsystems.drive.Drive;
 import java.util.List;
 import java.util.Optional;
 import org.photonvision.PhotonCamera;
+import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.PhotonUtils;
+import org.photonvision.PhotonPoseEstimator.PoseStrategy;
+import org.photonvision.targeting.MultiTargetPNPResult;
 import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
+import org.photonvision.targeting.PnpResult;
 
 public class PhotonVisionSubsystem extends SubsystemBase {
   private Drive m_driveSubsystem;
@@ -95,22 +99,13 @@ public class PhotonVisionSubsystem extends SubsystemBase {
     List<PhotonPipelineResult> results = camera.getAllUnreadResults();
     for (var result : results) {
       if (result.hasTargets()) {
-        PhotonTrackedTarget tar = result.getBestTarget();
+        Optional<MultiTargetPNPResult> tar = result.getMultiTagResult();
 
-        if (tar != null) {
-          Transform3d c2t = tar.getBestCameraToTarget();
-          SmartDashboard.putString(
-              camera.getName() + "-cam1Target",
-              c2t.getX()
-                  + " - "
-                  + c2t.getY()
-                  + " - "
-                  + c2t.getZ()
-                  + "  -  "
-                  + Units.radiansToDegrees(c2t.getRotation().getAngle()));
-          Optional<Pose3d> tagPose = fieldLayout.getTagPose(tar.getFiducialId());
-          fiducial = tar.getFiducialId() + "";
-          if (tagPose.isEmpty() || tar.getPoseAmbiguity() > 0.15) {
+        if (tar.isPresent()) {
+          PnpResult px = tar.get().estimatedPose;
+
+          if (px.ambiguity > 0.3) {
+
             continue;
           }
           Pose2d p =
