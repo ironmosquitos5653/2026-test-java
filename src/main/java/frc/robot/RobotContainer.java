@@ -14,11 +14,11 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.AimCommand;
-import frc.robot.commands.ClimbCommand;
 import frc.robot.commands.DriveCommands;
 import frc.robot.commands.IntakeDeployCommand;
+import frc.robot.commands.IntakeToggleCommad;
 import frc.robot.commands.ShootCommand;
-import frc.robot.subsystems.ClimbSubsystem;
+import frc.robot.subsystems.AutonomousManager;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.PhotonVisionSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
@@ -42,7 +42,8 @@ public class RobotContainer {
   private final PhotonVisionSubsystem photonVisionSubsystem;
   private final ShooterSubsystem shooterSubsystem;
   private final IntakeSubsystem intakeSubsystem;
-  private final ClimbSubsystem climbSubsystem;
+
+  private final AutonomousManager autonomousManager;
 
   // Controller
   private final CommandXboxController controller = new CommandXboxController(0);
@@ -91,7 +92,8 @@ public class RobotContainer {
     photonVisionSubsystem = new PhotonVisionSubsystem(drive);
     shooterSubsystem = new ShooterSubsystem();
     intakeSubsystem = new IntakeSubsystem();
-    climbSubsystem = new ClimbSubsystem();
+
+    autonomousManager = new AutonomousManager(drive, shooterSubsystem, intakeSubsystem);
 
     // Set up auto routines
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
@@ -119,12 +121,16 @@ public class RobotContainer {
     // x wheels
     controller.x().onTrue(Commands.runOnce(drive::stopWithX, drive));
 
-    controller.rightBumper().whileTrue(new ShootCommand(shooterSubsystem, intakeSubsystem, drive, false));
-    controller.leftBumper().onTrue(new IntakeDeployCommand(intakeSubsystem));
+    controller
+        .rightBumper()
+        .whileTrue(new ShootCommand(shooterSubsystem, intakeSubsystem, drive, false));
+    controller.leftBumper().onTrue(new IntakeDeployCommand(intakeSubsystem, false));
+    // controller.leftBumper().onTrue(new IntakeToggleCommad(intakeSubsystem, false));
 
+    // controller.a().whileTrue(new TestCommand(shooterSubsystem));
     // lef bumper brings in super duper fast :(
-    controller.a().whileTrue(new IntakeDeployCommand(intakeSubsystem, shooterSubsystem, false));
-    controller.b().whileTrue(new IntakeDeployCommand(intakeSubsystem, shooterSubsystem, true));
+    controller.a().whileTrue(new IntakeToggleCommad(intakeSubsystem, true));
+    controller.b().whileTrue(new IntakeToggleCommad(intakeSubsystem, false));
 
     controller.y().whileTrue(new AimCommand(drive));
   }

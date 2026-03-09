@@ -4,51 +4,39 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.ShooterSubsystem;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class IntakeDeployCommand extends Command {
+public class TestCommand extends Command {
+  ShooterSubsystem m_ShooterSubsystem;
 
-  IntakeSubsystem m_IntakeSubsystem;
-  boolean m_in;
-
-  private Timer timer;
-  private double duration;
-
-  public IntakeDeployCommand(IntakeSubsystem intakeSubsystem, boolean in) {
-    m_IntakeSubsystem = intakeSubsystem;
-    m_in = in;
-    addRequirements(m_IntakeSubsystem);
+  public TestCommand(ShooterSubsystem shooterSubsystem) {
+    m_ShooterSubsystem = shooterSubsystem;
+    addRequirements(m_ShooterSubsystem);
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {
-    timer = new Timer();
-    timer.start();
-    duration = 1;
-  }
+  public void initialize() {}
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-
-    m_IntakeSubsystem.setDeploySpeed(-.25);
-    m_IntakeSubsystem.setIntakeSpeed(-1);
+    if (m_ShooterSubsystem.isHoodDown()) {
+      m_ShooterSubsystem.setHoodPosition(.084);
+    } else {
+      m_ShooterSubsystem.setHoodPosition(0);
+    }
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {
-    m_IntakeSubsystem.setDeploySpeed(0);
-    // m_ShooterSubsystem.setHoodSpeed(0);
-  }
+  public void end(boolean interrupted) {}
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return timer.hasElapsed(duration);
+    return true;
   }
 }

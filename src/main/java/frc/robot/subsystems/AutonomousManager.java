@@ -5,8 +5,7 @@ package frc.robot.subsystems;
 
 import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
-import frc.robot.commands.ClimbCommand;
+import frc.robot.commands.IntakeDeployCommand;
 import frc.robot.commands.ShootCommand;
 import frc.robot.subsystems.drive.Drive;
 
@@ -14,27 +13,25 @@ import frc.robot.subsystems.drive.Drive;
 public class AutonomousManager {
   Drive m_Drive;
   ShooterSubsystem m_ShooterSubsystem;
-  ClimbSubsystem m_ClimbSubsystem;
   IntakeSubsystem m_IntakeSubsystem;
 
   public AutonomousManager(
-      Drive drive,
-      ShooterSubsystem shooterSubsystem,
-      ClimbSubsystem climbSubsystem,
-      IntakeSubsystem intakeSubsystem) {
+      Drive drive, ShooterSubsystem shooterSubsystem, IntakeSubsystem intakeSubsystem) {
     m_Drive = drive;
-    m_ClimbSubsystem = climbSubsystem;
+
     m_IntakeSubsystem = intakeSubsystem;
     m_ShooterSubsystem = shooterSubsystem;
+
+    initialize();
   }
 
   public void initialize() {
-    register("IntakeOn", Commands.runOnce(() -> m_IntakeSubsystem.out()));
+    register("IntakeOn", new IntakeDeployCommand(m_IntakeSubsystem, false));
     register("Shoot", new ShootCommand(m_ShooterSubsystem, m_IntakeSubsystem, m_Drive, true));
-    register("ClimbUp", new ClimbCommand(m_ClimbSubsystem));
   }
 
   private void register(String name, Command command) {
+    System.out.println(">>> " + name + " - " + command);
     NamedCommands.registerCommand(name, command);
   }
 }

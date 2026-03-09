@@ -5,9 +5,6 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.AbsoluteEncoder;
-import com.revrobotics.PersistMode;
-import com.revrobotics.ResetMode;
-import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
@@ -41,6 +38,10 @@ public class ShooterSubsystem extends SubsystemBase {
   private boolean shooting = false;
   private double hoodPosition = .0;
 
+  FlywheelSubsystem fws1;
+  FlywheelSubsystem fws2;
+  FlywheelSubsystem fws3;
+
   public ShooterSubsystem() {
     shooter1Motor = new SparkFlex(shooterMotorCANId, MotorType.kBrushless);
     shooter2Motor = new SparkFlex(shooter2MotorCANId, MotorType.kBrushless);
@@ -49,25 +50,11 @@ public class ShooterSubsystem extends SubsystemBase {
     advance2Motor = new SparkFlex(advance2MotorCANId, MotorType.kBrushless);
     hoodRotateMotor = new SparkFlex(hoodRotateMotorCANId, MotorType.kBrushless);
 
-    pid1 = shooter1Motor.getClosedLoopController();
-    pid2 = shooter2Motor.getClosedLoopController();
-    pid3 = shooter3Motor.getClosedLoopController();
-    config.closedLoop.p(.0001);
-    config.closedLoop.i(.00000067);
-    config.closedLoop.d(0);
-    shooter1Motor.configure(
-        config, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
-    shooter2Motor.configure(
-        config, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
-    shooter3Motor.configure(
-        config, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
+    fws1 = new FlywheelSubsystem(shooter1Motor);
+    fws2 = new FlywheelSubsystem(shooter2Motor);
+    fws3 = new FlywheelSubsystem(shooter3Motor);
 
-    // config.closedLoop.ff(.0001);
-    pid1.setSetpoint(0, ControlType.kVelocity);
-    pid2.setSetpoint(0, ControlType.kVelocity);
-    pid3.setSetpoint(0, ControlType.kVelocity);
-
-    hoodEncoderPidController = new PIDController(3, 0, 0);
+    hoodEncoderPidController = new PIDController(12, 0, .5);
     hoodEncoderPidController.enableContinuousInput(0, 1);
 
     hoodEncoder = hoodRotateMotor.getAbsoluteEncoder();
@@ -87,10 +74,10 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   public void setShootSpeed(double speed) {
+    fws1.setTargetRPM(-speed);
+    fws2.setTargetRPM(-speed);
+    fws3.setTargetRPM(-speed);
     shooting = speed != 0;
-    pid1.setSetpoint(-speed, ControlType.kVelocity);
-    pid2.setSetpoint(-speed, ControlType.kVelocity);
-    pid3.setSetpoint(-speed, ControlType.kVelocity);
   }
 
   public void setAdvanceSpeed(double speed) {
@@ -110,5 +97,13 @@ public class ShooterSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("RPM 1 start", shooter1Motor.getEncoder().getVelocity());
     SmartDashboard.putNumber("RPM 2 start", shooter2Motor.getEncoder().getVelocity());
     SmartDashboard.putNumber("RPM 3 start", shooter3Motor.getEncoder().getVelocity());
+  }
+
+  public boolean isHoodDown() {
+    return hoodEncoder.getPosition() < .02 || hoodEncoder.getPosition() > .9;
+  }
+
+  public double getVelocity() {
+    return shooter2Motor.getEncoder().getVelocity();
   }
 }

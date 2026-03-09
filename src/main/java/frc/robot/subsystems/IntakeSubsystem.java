@@ -9,6 +9,7 @@ import com.revrobotics.ResetMode;
 import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.SparkMaxConfig;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class IntakeSubsystem extends SubsystemBase {
@@ -28,11 +29,8 @@ public class IntakeSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    if (intakeDeployMotor.getEncoder().getVelocity() != 0) {
-      // setCurrentLimit(50);
-    } else {
-      // setCurrentLimit(20);
-    }
+    SmartDashboard.putNumber("Deploy speed", intakeDeployMotor.get());
+    System.out.println("x" + intakeMotor.get() + " - " + intakeMotor.getEncoder().getVelocity());
   }
 
   public void setCurrentLimit(int Current) {
@@ -64,7 +62,7 @@ public class IntakeSubsystem extends SubsystemBase {
     intakeDeployMotor.set(speed);
   }
 
-  /*/ public void intakeSpeed(double speed){
-  intakeMotor.set(speed);
-  }*/
+  public void setIntakeSpeed(double speed) {
+    intakeMotor.set(speed);
+  }
 }

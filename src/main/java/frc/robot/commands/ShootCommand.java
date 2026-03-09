@@ -7,7 +7,6 @@ package frc.robot.commands;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Timer;
@@ -34,9 +33,16 @@ public class ShootCommand extends Command {
 
   private boolean m_timed;
 
+  private Timer intakeTimer;
+  private boolean intakeIn;
+  private boolean intakeOn = false;
+
   /** Creates a new ShootCommand. */
   public ShootCommand(
-      ShooterSubsystem shooterSubsystem, IntakeSubsystem intakeSubsystem, Drive drive, boolean timed) {
+      ShooterSubsystem shooterSubsystem,
+      IntakeSubsystem intakeSubsystem,
+      Drive drive,
+      boolean timed) {
     m_ShooterSubsystem = shooterSubsystem;
     m_IntakeSubsystem = intakeSubsystem;
     m_drive = drive;
@@ -46,11 +52,13 @@ public class ShootCommand extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    intakeTimer = null;
+    intakeOn = false;
+    intakeIn = true;
     timer.reset();
     timer.start();
     System.out.println("SHOOTING!!!");
     System.out.println("RainAndWalterAreAWESOME");
-    dumped = false;
 
     hoodPosition = SmartDashboard.getNumber("HoodPosition", hoodPosition);
     speed = SmartDashboard.getNumber("ShootSpeed", speed);
@@ -58,21 +66,21 @@ public class ShootCommand extends Command {
     SmartDashboard.putNumber("ShootSpeed", speed);
   }
 
-  private boolean dumped = false;
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     // m_IntakeSubsystem.in();
     double distance = 3; // getDistance();
     aim();
-    setHood(distance);
-    setShootSpeed(distance);
-    if (timer.hasElapsed(3)) {
-      if (!dumped) {
-        m_ShooterSubsystem.dump();
-        dumped = true;
-      }
+    setHood(0.067);
+    double velocity = calculateShootSpeed(distance);
+
+    setShootSpeed(velocity);
+
+    if (m_ShooterSubsystem.getVelocity() < -velocity * .90) {
       m_ShooterSubsystem.setAdvanceSpeed(1);
+      jiggleIntake();
+      // intakeIn();
     }
   }
 
@@ -81,6 +89,8 @@ public class ShootCommand extends Command {
   public void end(boolean interrupted) {
     m_ShooterSubsystem.setShootSpeed(0);
     m_ShooterSubsystem.setAdvanceSpeed(0);
+    m_IntakeSubsystem.setDeploySpeed(0);
+    m_IntakeSubsystem.setIntakeSpeed(0);
     setHood(0);
   }
 
@@ -88,7 +98,7 @@ public class ShootCommand extends Command {
   @Override
   public boolean isFinished() {
     // shoot while held.
-    if (! m_timed) return false;
+    if (!m_timed) return false;
 
     return timer.hasElapsed(10);
   }
@@ -111,18 +121,83 @@ public class ShootCommand extends Command {
   public void aim() {
     m_drive.stopWithX();
 
-    //double omega = m_drive.getTurnToPoseOutput(getTargetPose2d(), turnController);
+    // double omega = m_drive.getTurnToPoseOutput(getTargetPose2d(), turnController);
     // No translation, rotate in place using chassis speeds
-    //m_drive.runVelocity(new ChassisSpeeds(0.0, 0.0, omega));
+    // m_drive.runVelocity(new ChassisSpeeds(0.0, 0.0, omega));
   }
 
-  public void setHood(double distance) {
-    m_ShooterSubsystem.setHoodPosition(0.084);
+  public void setHood(double position) {
+    m_ShooterSubsystem.setHoodPosition(position);
     // up .6
     // down .44
   }
 
-  public void setShootSpeed(double distance) {
-    m_ShooterSubsystem.setShootSpeed(4500);
+  private double calculateShootSpeed(double distance) {
+    return 3400;
+  }
+
+  public void setShootSpeed(double velocity) {
+    m_ShooterSubsystem.setShootSpeed(velocity);
+  }
+
+  private void intakeIn() {
+
+    if (!intakeOn) {
+      if (intakeTimer == null) {
+        intakeTimer = new Timer();
+        intakeTimer.start();
+      }
+
+      if (intakeTimer.hasElapsed(1)) {
+        intakeOn = true;
+        intakeTimer.reset();
+        intakeTimer.start();
+      } else {
+        return;
+      }
+    }
+
+    m_IntakeSubsystem.setIntakeSpeed(-1);
+    m_IntakeSubsystem.setDeploySpeed(.15);
+  }
+
+  private void jiggleIntake() {
+
+    if (!intakeOn) {
+      if (intakeTimer == null) {
+        intakeTimer = new Timer();
+        intakeTimer.start();
+      }
+
+      if (intakeTimer.hasElapsed(1)) {
+        intakeOn = true;
+        intakeTimer.reset();
+        intakeTimer.start();
+      } else {
+        return;
+      }
+    }
+
+    if (intakeTimer == null) {
+      intakeTimer = new Timer();
+      intakeTimer.start();
+    }
+    m_IntakeSubsystem.setIntakeSpeed(-1);
+
+    if (intakeIn && intakeTimer.hasElapsed(.5)) {
+      intakeIn = false;
+      intakeTimer.reset();
+      intakeTimer.start();
+    } else if (!intakeIn && intakeTimer.hasElapsed(.25)) {
+      intakeIn = true;
+      intakeTimer.reset();
+      intakeTimer.start();
+    }
+
+    if (intakeIn) {
+      m_IntakeSubsystem.setDeploySpeed(.2);
+    } else {
+      m_IntakeSubsystem.setDeploySpeed(-.2);
+    }
   }
 }

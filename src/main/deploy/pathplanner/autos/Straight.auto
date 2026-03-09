@@ -1,0 +1,49 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "notacommand"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "IntakeOn"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "straight2"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "straight"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "straight3"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}
