@@ -7,6 +7,7 @@ package frc.robot.commands;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Timer;
@@ -15,6 +16,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.drive.Drive;
+import frc.robot.util.ShootData;
 import frc.robot.util.TurnToPoseController;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
@@ -27,9 +29,6 @@ public class ShootCommand extends Command {
 
   public static Pose2d redTarget = new Pose2d(new Translation2d(11.9, 4.6), new Rotation2d(0));
   public static Pose2d blueTarget = new Pose2d(new Translation2d(4.6, 4.0), new Rotation2d(0));
-
-  private double hoodPosition = 0;
-  private double speed = 4000;
 
   private boolean m_timed;
 
@@ -59,22 +58,18 @@ public class ShootCommand extends Command {
     timer.start();
     System.out.println("SHOOTING!!!");
     System.out.println("RainAndWalterAreAWESOME");
-
-    hoodPosition = SmartDashboard.getNumber("HoodPosition", hoodPosition);
-    speed = SmartDashboard.getNumber("ShootSpeed", speed);
-    SmartDashboard.putNumber("HoodPosition", hoodPosition);
-    SmartDashboard.putNumber("ShootSpeed", speed);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    // m_IntakeSubsystem.in();
-    double distance = 3; // getDistance();
     aim();
-    setHood(0.067);
-    double velocity = calculateShootSpeed(distance);
 
+    double[] calculations = getVelocityAndHood(m_drive);
+    double velocity = calculations[0];
+    double hood = calculations[1];
+    
+    setHood(hood);
     setShootSpeed(velocity);
 
     if (m_ShooterSubsystem.getVelocity() < -velocity * .90) {
@@ -119,11 +114,8 @@ public class ShootCommand extends Command {
   }
 
   public void aim() {
-    m_drive.stopWithX();
-
-    // double omega = m_drive.getTurnToPoseOutput(getTargetPose2d(), turnController);
-    // No translation, rotate in place using chassis speeds
-    // m_drive.runVelocity(new ChassisSpeeds(0.0, 0.0, omega));
+    double omega = m_drive.getTurnToPoseOutput(getTargetPose2d(), turnController);
+    m_drive.runVelocity(new ChassisSpeeds(0.0, 0.0, -omega));
   }
 
   public void setHood(double position) {
@@ -200,4 +192,69 @@ public class ShootCommand extends Command {
       m_IntakeSubsystem.setDeploySpeed(-.2);
     }
   }
+
+  public static double[] getVelocityAndHood(Drive drive) {
+    double distance = getDistance(drive);
+    return getVelocityAndHood(distance);
+  }
+
+  public static double[] getVelocityAndHood(double distance) {
+    // Use shootDatas to interpolate (or extrapolate) velocity and hood
+    ShootData[] data = shootDatas;
+
+    // If distance is below the first entry, extrapolate using first two
+    if (distance <= data[0].distance()) {
+      ShootData a = data[0];
+      ShootData b = data[1];
+      double t = (distance - a.distance()) / (b.distance() - a.distance());
+      if (Double.isNaN(t) || Double.isInfinite(t)) t = 0.0;
+      double vel = a.velocity() + t * (b.velocity() - a.velocity());
+      double hood = a.hood() + t * (b.hood() - a.hood());
+      return new double[] {vel, hood};
+    }
+
+    // If distance is above the last entry, extrapolate using last two
+    int last = data.length - 1;
+    if (distance >= data[last].distance()) {
+      ShootData a = data[last - 1];
+      ShootData b = data[last];
+      double t = (distance - a.distance()) / (b.distance() - a.distance());
+      if (Double.isNaN(t) || Double.isInfinite(t)) t = 0.0;
+      double vel = a.velocity() + t * (b.velocity() - a.velocity());
+      double hood = a.hood() + t * (b.hood() - a.hood());
+      return new double[] {vel, hood};
+    }
+
+    // Otherwise find the interval [i, i+1] that contains distance
+    for (int i = 0; i < data.length - 1; i++) {
+      ShootData a = data[i];
+      ShootData b = data[i + 1];
+      if (distance >= a.distance() && distance <= b.distance()) {
+        double t = (distance - a.distance()) / (b.distance() - a.distance());
+        if (Double.isNaN(t) || Double.isInfinite(t)) t = 0.0;
+        double vel = a.velocity() + t * (b.velocity() - a.velocity());
+        double hood = a.hood() + t * (b.hood() - a.hood());
+        return new double[] {vel, hood};
+      }
+    }
+
+    // Fallback (shouldn't happen): return closest
+    ShootData closest = data[0];
+    double bestDiff = Math.abs(distance - closest.distance());
+    for (ShootData sd : data) {
+      double diff = Math.abs(distance - sd.distance());
+      if (diff < bestDiff) {
+        closest = sd;
+        bestDiff = diff;
+      }
+    }
+    return new double[] {closest.velocity(), closest.hood()};
+  }
+
+  private static final ShootData[] shootDatas = new ShootData[]{
+    new ShootData(.6,3000,0.032),
+    new ShootData(1.97, 3350, 0.065),
+    new ShootData(2.7,3450,0.067)
+  };
+
 }

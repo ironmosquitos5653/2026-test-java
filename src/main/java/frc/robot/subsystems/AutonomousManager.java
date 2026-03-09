@@ -26,7 +26,7 @@ public class AutonomousManager {
   }
 
   public void initialize() {
-    register("IntakeOn", new IntakeDeployCommand(m_IntakeSubsystem, false));
+    register("IntakeOn", new IntakeDeployCommand(m_IntakeSubsystem));
     register("Shoot", new ShootCommand(m_ShooterSubsystem, m_IntakeSubsystem, m_Drive, true));
   }
 

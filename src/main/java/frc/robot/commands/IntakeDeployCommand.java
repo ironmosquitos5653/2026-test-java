@@ -12,14 +12,11 @@ import frc.robot.subsystems.IntakeSubsystem;
 public class IntakeDeployCommand extends Command {
 
   IntakeSubsystem m_IntakeSubsystem;
-  boolean m_in;
 
   private Timer timer;
-  private double duration;
 
-  public IntakeDeployCommand(IntakeSubsystem intakeSubsystem, boolean in) {
+  public IntakeDeployCommand(IntakeSubsystem intakeSubsystem) {
     m_IntakeSubsystem = intakeSubsystem;
-    m_in = in;
     addRequirements(m_IntakeSubsystem);
   }
 
@@ -28,7 +25,6 @@ public class IntakeDeployCommand extends Command {
   public void initialize() {
     timer = new Timer();
     timer.start();
-    duration = 1;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -49,6 +45,7 @@ public class IntakeDeployCommand extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return timer.hasElapsed(duration);
+    
+    return timer.hasElapsed(1);
   }
 }

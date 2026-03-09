@@ -18,6 +18,7 @@ import frc.robot.commands.DriveCommands;
 import frc.robot.commands.IntakeDeployCommand;
 import frc.robot.commands.IntakeToggleCommad;
 import frc.robot.commands.ShootCommand;
+import frc.robot.commands.SimpleShootCommand;
 import frc.robot.subsystems.AutonomousManager;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.PhotonVisionSubsystem;
@@ -47,6 +48,7 @@ public class RobotContainer {
 
   // Controller
   private final CommandXboxController controller = new CommandXboxController(0);
+  private final CommandXboxController controller2 = new CommandXboxController(1);
 
   // Dashboard inputs
   private final LoggedDashboardChooser<Command> autoChooser;
@@ -121,18 +123,31 @@ public class RobotContainer {
     // x wheels
     controller.x().onTrue(Commands.runOnce(drive::stopWithX, drive));
 
+    // Shoot command
     controller
         .rightBumper()
         .whileTrue(new ShootCommand(shooterSubsystem, intakeSubsystem, drive, false));
-    controller.leftBumper().onTrue(new IntakeDeployCommand(intakeSubsystem, false));
-    // controller.leftBumper().onTrue(new IntakeToggleCommad(intakeSubsystem, false));
 
-    // controller.a().whileTrue(new TestCommand(shooterSubsystem));
-    // lef bumper brings in super duper fast :(
+    // Deploys intake and turns it on.
+    controller.leftBumper().onTrue(new IntakeDeployCommand(intakeSubsystem));
+
+    //Intake in and out at a slow rate.
     controller.a().whileTrue(new IntakeToggleCommad(intakeSubsystem, true));
     controller.b().whileTrue(new IntakeToggleCommad(intakeSubsystem, false));
 
     controller.y().whileTrue(new AimCommand(drive));
+
+    controller2.x().whileTrue(Commands.run(() -> drive.stopWithX(), drive));
+    controller2.a().whileTrue(new SimpleShootCommand(shooterSubsystem, intakeSubsystem, drive, 3000,0.032));
+    controller2.b().whileTrue(new SimpleShootCommand(shooterSubsystem, intakeSubsystem, drive, 3450,0.067));
+
+    //  Change these values to test for corner shoot.
+    controller2.rightBumper().whileTrue(
+      new SimpleShootCommand(shooterSubsystem,
+                      intakeSubsystem,
+                      drive,
+                      3450,
+                      .067));
   }
 
   /**

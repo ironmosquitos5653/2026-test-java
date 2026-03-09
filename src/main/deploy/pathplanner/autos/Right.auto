@@ -7,29 +7,23 @@
         {
           "type": "named",
           "data": {
-            "name": "Shoot"
+            "name": "FirstShoot"
           }
         },
         {
-          "type": "path",
-          "data": {
-            "pathName": "BL1"
-          }
-        },
-        {
-          "type": "sequential",
+          "type": "parallel",
           "data": {
             "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "BL2"
-                }
-              },
               {
                 "type": "named",
                 "data": {
                   "name": "IntakeOn"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "right1"
                 }
               }
             ]
@@ -38,25 +32,19 @@
         {
           "type": "path",
           "data": {
-            "pathName": "BL3"
+            "pathName": "right2"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "right3"
           }
         },
         {
           "type": "named",
           "data": {
             "name": "Shoot"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "BL4"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "ClimbUp"
           }
         }
       ]
