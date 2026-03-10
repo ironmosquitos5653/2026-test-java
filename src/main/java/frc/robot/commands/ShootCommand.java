@@ -254,7 +254,8 @@ public class ShootCommand extends Command {
   private static final ShootData[] shootDatas = new ShootData[]{
     new ShootData(.6,3000,0.032),
     new ShootData(1.97, 3350, 0.065),
-    new ShootData(2.7,3450,0.067)
+    new ShootData(2.7,3450,0.067),
+    new ShootData(5.0, 3875,0.085)
   };
 
 }
