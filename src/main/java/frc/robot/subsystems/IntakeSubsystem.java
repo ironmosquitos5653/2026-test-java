@@ -24,7 +24,7 @@ public class IntakeSubsystem extends SubsystemBase {
 
   private DigitalInput intakeSensor = new DigitalInput(0);
 
-  private double intakeOutPosition;
+  private double intakeOutPosition = - 143;
 
   public IntakeSubsystem() {
     intakeMotor = new SparkFlex(intakeMotorCANId, MotorType.kBrushless);
@@ -48,7 +48,7 @@ public class IntakeSubsystem extends SubsystemBase {
   }
 
   public boolean isOut() {
-    return intakeMotor.getEncoder().getPosition() > intakeOutPosition;
+    return intakeMotor.getEncoder().getPosition() < intakeOutPosition;
   }
 
   public double getIntakeOutPosition() {

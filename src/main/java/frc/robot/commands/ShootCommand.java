@@ -187,9 +187,9 @@ public class ShootCommand extends Command {
     }
 
     if (intakeIn) {
-      m_IntakeSubsystem.setDeploySpeed(.2);
+      m_IntakeSubsystem.setDeploySpeed(.4);
     } else {
-      m_IntakeSubsystem.setDeploySpeed(-.2);
+      m_IntakeSubsystem.setDeploySpeed(-.4);
     }
   }
 

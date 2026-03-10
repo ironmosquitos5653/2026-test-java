@@ -25,8 +25,8 @@ public class IntakeToggleCommad extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (m_in) m_IntakeSubsystem.setDeploySpeed(-.2);
-    else m_IntakeSubsystem.setDeploySpeed(.2);
+    if (m_in) m_IntakeSubsystem.setDeploySpeed(-.4);
+    else m_IntakeSubsystem.setDeploySpeed(.4);
     m_IntakeSubsystem.setIntakeSpeed(-1);
   }
 
