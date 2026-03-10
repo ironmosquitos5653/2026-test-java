@@ -146,7 +146,7 @@ public class RobotContainer {
       new SimpleShootCommand(shooterSubsystem,
                       intakeSubsystem,
                       drive,
-                      3800,
+                      3950,
                       .085));
   }
 
