@@ -5,6 +5,7 @@ package frc.robot.subsystems;
 
 import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.commands.FirstShootCommand;
 import frc.robot.commands.IntakeDeployCommand;
 import frc.robot.commands.ShootCommand;
 import frc.robot.subsystems.drive.Drive;
@@ -28,6 +29,7 @@ public class AutonomousManager {
   public void initialize() {
     register("IntakeOn", new IntakeDeployCommand(m_IntakeSubsystem));
     register("Shoot", new ShootCommand(m_ShooterSubsystem, m_IntakeSubsystem, m_Drive, true));
+    register("FirstShoot", new FirstShootCommand(m_ShooterSubsystem, m_Drive));
   }
 
   private void register(String name, Command command) {

@@ -146,14 +146,14 @@ public class RobotContainer {
       new SimpleShootCommand(shooterSubsystem,
                       intakeSubsystem,
                       drive,
-                      3450,
-                      .067));
+                      3800,
+                      .085));
   }
 
 
   // Make intake faster with buttons
   // set intake out -126
-  
+
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
