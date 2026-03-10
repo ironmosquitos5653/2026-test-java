@@ -11,22 +11,9 @@
           }
         },
         {
-          "type": "parallel",
+          "type": "path",
           "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "IntakeOn"
-                }
-              },
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "right1"
-                }
-              }
-            ]
+            "pathName": "right1"
           }
         },
         {
