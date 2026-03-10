@@ -21,46 +21,21 @@ public class IntakeSubsystem extends SubsystemBase {
 
   private SparkFlex intakeMotor;
   private SparkFlex intakeDeployMotor;
-  private double speed = .5;
 
   private DigitalInput intakeSensor = new DigitalInput(0);
 
-  private double intakeInPosition;
+  private double intakeOutPosition;
 
   public IntakeSubsystem() {
     intakeMotor = new SparkFlex(intakeMotorCANId, MotorType.kBrushless);
     intakeDeployMotor = new SparkFlex(intakeDeployMotorCANId, MotorType.kBrushless);
-    setCurrentLimit(60);
   }
 
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("Deploy speed", intakeDeployMotor.get());
-    System.out.println("x" + intakeMotor.get() + " - " + intakeMotor.getEncoder().getVelocity());
-  }
-
-  public void setCurrentLimit(int Current) {
-    SparkMaxConfig config = new SparkMaxConfig();
-    config.smartCurrentLimit(Current);
-    intakeDeployMotor.configure(
-        config, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
-  }
-
-  public void in() {
-    intakeDeployMotor.set(1);
-    intakeMotor.set(0);
-  }
-
-  public void out() {
-    intakeDeployMotor.set(-1);
-    intakeMotor.set(-1);
-  }
-
-  public void toggle() {
-    if (intakeMotor.get() != 0) {
-      in();
-    } else {
-      out();
+    SmartDashboard.putNumber("Intake position", intakeMotor.getEncoder().getPosition());
+    if (! intakeSensor.get()) {
+      intakeMotor.getEncoder().setPosition(0);
     }
   }
 
@@ -72,7 +47,11 @@ public class IntakeSubsystem extends SubsystemBase {
     intakeMotor.set(speed);
   }
 
-  public boolean isIn() {
-    return ! intakeSensor.get();
+  public boolean isOut() {
+    return intakeMotor.getEncoder().getPosition() > intakeOutPosition;
+  }
+
+  public double getIntakeOutPosition() {
+    return intakeOutPosition;
   }
 }

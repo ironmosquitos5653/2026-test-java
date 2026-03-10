@@ -39,13 +39,11 @@ public class IntakeDeployCommand extends Command {
   @Override
   public void end(boolean interrupted) {
     m_IntakeSubsystem.setDeploySpeed(0);
-    // m_ShooterSubsystem.setHoodSpeed(0);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    
     return timer.hasElapsed(1);
   }
 }
