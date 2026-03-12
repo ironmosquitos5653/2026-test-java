@@ -106,4 +106,17 @@ public class ShooterSubsystem extends SubsystemBase {
   public double getVelocity() {
     return shooter2Motor.getEncoder().getVelocity();
   }
+
+  public double getShooterVelocity(int shooter) {
+    switch (shooter) {
+      case 0:
+        return shooter1Motor.getEncoder().getVelocity();
+      case 1:
+        return shooter2Motor.getEncoder().getVelocity();
+      case 2:
+        return shooter3Motor.getEncoder().getVelocity();
+      default:
+        return 0.0;
+    }
+  }
 }

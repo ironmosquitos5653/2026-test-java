@@ -4,12 +4,8 @@
 
 package frc.robot.subsystems;
 
-import com.revrobotics.PersistMode;
-import com.revrobotics.ResetMode;
 import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
-import com.revrobotics.spark.config.SparkMaxConfig;
-
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -24,7 +20,7 @@ public class IntakeSubsystem extends SubsystemBase {
 
   private DigitalInput intakeSensor = new DigitalInput(0);
 
-  private double intakeOutPosition = - 143;
+  private double intakeOutPosition = -143;
 
   public IntakeSubsystem() {
     intakeMotor = new SparkFlex(intakeMotorCANId, MotorType.kBrushless);
@@ -34,7 +30,7 @@ public class IntakeSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     SmartDashboard.putNumber("Intake position", intakeMotor.getEncoder().getPosition());
-    if (! intakeSensor.get()) {
+    if (!intakeSensor.get()) {
       intakeMotor.getEncoder().setPosition(0);
     }
   }
@@ -44,6 +40,9 @@ public class IntakeSubsystem extends SubsystemBase {
   }
 
   public void setIntakeSpeed(double speed) {
+    if (! intakeSensor.get()) {
+      speed = 0;
+    }
     intakeMotor.set(speed);
   }
 

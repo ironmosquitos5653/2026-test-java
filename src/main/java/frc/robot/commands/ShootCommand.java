@@ -11,7 +11,6 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
@@ -68,7 +67,7 @@ public class ShootCommand extends Command {
     double[] calculations = getVelocityAndHood(m_drive);
     double velocity = calculations[0];
     double hood = calculations[1];
-    
+
     setHood(hood);
     setShootSpeed(velocity);
 
@@ -251,11 +250,11 @@ public class ShootCommand extends Command {
     return new double[] {closest.velocity(), closest.hood()};
   }
 
-  private static final ShootData[] shootDatas = new ShootData[]{
-    new ShootData(.6,3000,0.032),
-    new ShootData(1.97, 3350, 0.065),
-    new ShootData(2.7,3450,0.067),
-    new ShootData(5.0, 3875,0.085)
-  };
-
+  private static final ShootData[] shootDatas =
+      new ShootData[] {
+        new ShootData(.6, 3000, 0.032),
+        new ShootData(1.97, 3350, 0.065),
+        new ShootData(2.7, 3450, 0.067),
+        new ShootData(5.0, 3875, 0.085)
+      };
 }

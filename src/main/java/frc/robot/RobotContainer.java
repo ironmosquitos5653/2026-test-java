@@ -131,29 +131,28 @@ public class RobotContainer {
     // Deploys intake and turns it on.
     controller.leftBumper().onTrue(new IntakeDeployCommand(intakeSubsystem));
 
-    //Intake in and out at a slow rate.
+    // Intake in and out at a slow rate.
     controller.a().whileTrue(new IntakeToggleCommad(intakeSubsystem, true));
     controller.b().whileTrue(new IntakeToggleCommad(intakeSubsystem, false));
 
     controller.y().whileTrue(new AimCommand(drive));
 
     controller2.x().whileTrue(Commands.run(() -> drive.stopWithX(), drive));
-    controller2.a().whileTrue(new SimpleShootCommand(shooterSubsystem, intakeSubsystem, drive, 3000,0.032));
-    controller2.b().whileTrue(new SimpleShootCommand(shooterSubsystem, intakeSubsystem, drive, 3450,0.067));
+    controller2
+        .a()
+        .whileTrue(new SimpleShootCommand(shooterSubsystem, intakeSubsystem, drive, 3000, 0.032));
+    controller2
+        .b()
+        .whileTrue(new SimpleShootCommand(shooterSubsystem, intakeSubsystem, drive, 3450, 0.067));
 
     //  Change these values to test for corner shoot.
-    controller2.rightBumper().whileTrue(
-      new SimpleShootCommand(shooterSubsystem,
-                      intakeSubsystem,
-                      drive,
-                      3950,
-                      .085));
+    controller2
+        .rightBumper()
+        .whileTrue(new SimpleShootCommand(shooterSubsystem, intakeSubsystem, drive, 3950, .085));
   }
-
 
   // Make intake faster with buttons
   // set intake out -126
-
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.

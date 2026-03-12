@@ -322,4 +322,8 @@ public class Drive extends SubsystemBase {
   public double getTurnToPoseOutput(Pose2d target, TurnToPoseController controller) {
     return controller.calculate(getPose(), target);
   }
+
+  public double getDriveVelocity(int moduleIndex) {
+    return modules[moduleIndex].getState().speedMetersPerSecond;
+  }
 }

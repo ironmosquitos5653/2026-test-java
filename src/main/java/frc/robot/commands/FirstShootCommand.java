@@ -17,13 +17,10 @@ public class FirstShootCommand extends Command {
   Timer timer = new Timer();
 
   /** Creates a new ShootCommand. */
-  public FirstShootCommand(
-      ShooterSubsystem shooterSubsystem,
-      Drive drive) {
+  public FirstShootCommand(ShooterSubsystem shooterSubsystem, Drive drive) {
     m_ShooterSubsystem = shooterSubsystem;
     m_drive = drive;
     addRequirements(m_ShooterSubsystem, m_drive);
-
   }
 
   // Called when the command is initially scheduled.
@@ -41,7 +38,7 @@ public class FirstShootCommand extends Command {
     double[] calculations = getVelocityAndHood();
     double velocity = calculations[0];
     double hood = calculations[1];
-    
+
     setHood(hood);
     setShootSpeed(velocity);
 
@@ -65,6 +62,7 @@ public class FirstShootCommand extends Command {
   }
 
   TurnToPoseController turnController = new TurnToPoseController(1, 0, 0);
+
   public void aim() {
     double omega = m_drive.getTurnToPoseOutput(ShootCommand.getTargetPose2d(), turnController);
     m_drive.runVelocity(new ChassisSpeeds(0.0, 0.0, -omega));
@@ -81,5 +79,4 @@ public class FirstShootCommand extends Command {
   public double[] getVelocityAndHood() {
     return ShootCommand.getVelocityAndHood(m_drive);
   }
-
 }

@@ -50,7 +50,7 @@ public class FlywheelSubsystem extends SubsystemBase {
   }
 
   // Utility to get current RPM from your encoder
-  private double getCurrentRPM() {
+  public double getCurrentRPM() {
     // Replace with your actual encoder call. For SparkMax RelativeEncoder: getVelocity() -> RPM
     // For TalonFX you'd need to convert native units/100ms to RPM
     return flyWheelEncoder.getVelocity();
