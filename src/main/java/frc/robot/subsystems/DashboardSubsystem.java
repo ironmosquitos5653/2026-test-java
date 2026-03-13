@@ -27,7 +27,9 @@ public class DashboardSubsystem extends SubsystemBase {
   public DashboardSubsystem(Drive drive, ShooterSubsystem shooter) {
     m_drive = drive;
     m_shooter = shooter;
-    
+
+    iterations++;
+
     ShuffleboardTab tab = Shuffleboard.getTab("motors");
     tab.addNumber("frontLeftDrive", this::getDriveMotor0).withPosition(0, 0).withSize(4, 0);
     tab.addNumber("frontRightDrive", this::getDriveMotor1).withPosition(2, 0).withSize(4, 0);
@@ -39,32 +41,31 @@ public class DashboardSubsystem extends SubsystemBase {
   }
 
   private double getDriveMotor0() {
-    return frontLeftDrive/iterations;
+    return frontLeftDrive / iterations;
   }
 
-    private double getDriveMotor1() {
-    return frontRightDrive/iterations;
+  private double getDriveMotor1() {
+    return frontRightDrive / iterations;
   }
 
-    private double getDriveMotor2() {
-    return backLeftDrive/iterations;
+  private double getDriveMotor2() {
+    return backLeftDrive / iterations;
   }
 
-    private double getDriveMotor3() {
-    return backRightDrive/iterations;
+  private double getDriveMotor3() {
+    return backRightDrive / iterations;
   }
 
-    private double getShootMotor1() {
-    return shooter1/iterations;
+  private double getShootMotor1() {
+    return shooter1 / iterations;
   }
 
-  
-    private double getShootMotor2() {
-    return shooter2/iterations;
+  private double getShootMotor2() {
+    return shooter2 / iterations;
   }
-  
-    private double getShootMotor3() {
-    return shooter3/iterations;
+
+  private double getShootMotor3() {
+    return shooter3 / iterations;
   }
 
   @Override

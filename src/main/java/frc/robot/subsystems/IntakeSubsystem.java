@@ -40,7 +40,7 @@ public class IntakeSubsystem extends SubsystemBase {
   }
 
   public void setIntakeSpeed(double speed) {
-    if (! intakeSensor.get()) {
+    if (!intakeSensor.get()) {
       speed = 0;
     }
     intakeMotor.set(speed);

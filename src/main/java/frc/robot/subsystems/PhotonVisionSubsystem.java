@@ -142,6 +142,7 @@ public class PhotonVisionSubsystem extends SubsystemBase {
 
             Pose2d tag = fieldLayout.getTagPose(tar.getFiducialId()).get().toPose2d();
             double distance = PhotonUtils.getDistanceToPose(p, tag);
+
             double std = distance * distance * .1;
 
             SmartDashboard.putNumber("STD", std);

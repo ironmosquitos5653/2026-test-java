@@ -94,6 +94,7 @@ public class RobotContainer {
     photonVisionSubsystem = new PhotonVisionSubsystem(drive);
     shooterSubsystem = new ShooterSubsystem();
     intakeSubsystem = new IntakeSubsystem();
+    // new DashboardSubsystem(drive, shooterSubsystem);
 
     autonomousManager = new AutonomousManager(drive, shooterSubsystem, intakeSubsystem);
 
@@ -149,6 +150,10 @@ public class RobotContainer {
     controller2
         .rightBumper()
         .whileTrue(new SimpleShootCommand(shooterSubsystem, intakeSubsystem, drive, 3950, .085));
+
+    controller2
+        .leftBumper()
+        .whileTrue(new SimpleShootCommand(shooterSubsystem, intakeSubsystem, drive, 3100, .05));
   }
 
   // Make intake faster with buttons

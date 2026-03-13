@@ -26,7 +26,7 @@ public class ShootCommand extends Command {
   TurnToPoseController turnController = new TurnToPoseController(1, 0, 0);
   Timer timer = new Timer();
 
-  public static Pose2d redTarget = new Pose2d(new Translation2d(11.9, 4.6), new Rotation2d(0));
+  public static Pose2d redTarget = new Pose2d(new Translation2d(11.9, 4.0), new Rotation2d(0));
   public static Pose2d blueTarget = new Pose2d(new Translation2d(4.6, 4.0), new Rotation2d(0));
 
   private boolean m_timed;
@@ -253,8 +253,8 @@ public class ShootCommand extends Command {
   private static final ShootData[] shootDatas =
       new ShootData[] {
         new ShootData(.6, 3000, 0.032),
-        new ShootData(1.97, 3350, 0.065),
-        new ShootData(2.7, 3450, 0.067),
-        new ShootData(5.0, 3875, 0.085)
+        new ShootData(2.18, 3100, 0.05),
+        new ShootData(3.46, 3425, 0.067),
+        new ShootData(5.0, 3855, 0.085)
       };
 }
