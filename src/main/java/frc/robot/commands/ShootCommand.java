@@ -94,7 +94,7 @@ public class ShootCommand extends Command {
     // shoot while held.
     if (!m_timed) return false;
 
-    return timer.hasElapsed(10);
+    return timer.hasElapsed(6);
   }
 
   public double geDistance() {

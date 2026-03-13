@@ -16,16 +16,16 @@
     },
     {
       "anchor": {
-        "x": 3.068608582574771,
-        "y": 7.107477243172952
+        "x": 3.2622393822393834,
+        "y": 7.192574002574003
       },
       "prevControl": {
-        "x": 5.085474642392716,
-        "y": 8.003862158647594
+        "x": 5.279105442057329,
+        "y": 8.088958918048645
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "lbf3"
     }
   ],
   "rotationTargets": [
@@ -51,7 +51,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -64.44003482817614
+    "rotation": -66.16125981682826
   },
   "reversed": false,
   "folder": null,

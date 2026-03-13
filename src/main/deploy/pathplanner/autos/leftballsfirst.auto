@@ -5,27 +5,27 @@
     "data": {
       "commands": [
         {
-          "type": "named",
+          "type": "wait",
           "data": {
-            "name": "FirstShoot"
+            "waitTime": 0.25
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "left1"
+            "pathName": "leftballsfirst1"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "left2"
+            "pathName": "leftballsfirst2"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "lefttrench3"
+            "pathName": "leftballsfirst3"
           }
         },
         {
