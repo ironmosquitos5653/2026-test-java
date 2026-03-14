@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.126048906048906,
-        "y": 7.647824967824967
+        "x": 4.091029601029601,
+        "y": 7.799575289575291
       },
       "isLocked": false,
       "linkedName": "lbf3"
@@ -30,7 +30,7 @@
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.23911111111111313,
+      "waypointRelativePos": 0.1804444444444469,
       "rotationDegrees": 0.0
     },
     {

@@ -23,7 +23,7 @@ public class ShootCommand extends Command {
   ShooterSubsystem m_ShooterSubsystem;
   IntakeSubsystem m_IntakeSubsystem;
   Drive m_drive;
-  TurnToPoseController turnController = new TurnToPoseController(1, 0, 0);
+  TurnToPoseController turnController = new TurnToPoseController(4, 0, 0);
   Timer timer = new Timer();
 
   public static Pose2d redTarget = new Pose2d(new Translation2d(11.9, 4.0), new Rotation2d(0));

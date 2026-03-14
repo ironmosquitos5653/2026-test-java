@@ -17,6 +17,7 @@ import frc.robot.commands.AimCommand;
 import frc.robot.commands.DriveCommands;
 import frc.robot.commands.IntakeDeployCommand;
 import frc.robot.commands.IntakeToggleCommad;
+import frc.robot.commands.ReverseCommand;
 import frc.robot.commands.ShootCommand;
 import frc.robot.commands.SimpleShootCommand;
 import frc.robot.subsystems.AutonomousManager;
@@ -137,6 +138,7 @@ public class RobotContainer {
     controller.b().whileTrue(new IntakeToggleCommad(intakeSubsystem, false));
 
     controller.y().whileTrue(new AimCommand(drive));
+    controller.povDown().whileTrue(new ReverseCommand(shooterSubsystem));
 
     controller2.x().whileTrue(Commands.run(() -> drive.stopWithX(), drive));
     controller2
