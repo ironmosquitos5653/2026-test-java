@@ -158,11 +158,19 @@ public class RobotContainer {
     // Hood up and down.
     controller2
         .povDown()
-        .whileTrue(Commands.startEnd(() -> shooterSubsystem.setHoodSpeed(-.3),() -> shooterSubsystem.setHoodSpeed(0), shooterSubsystem));
+        .whileTrue(
+            Commands.startEnd(
+                () -> shooterSubsystem.setHoodSpeed(-.3),
+                () -> shooterSubsystem.setHoodSpeed(0),
+                shooterSubsystem));
 
     controller2
         .povUp()
-        .whileTrue(Commands.startEnd(() -> shooterSubsystem.setHoodSpeed(.3),() -> shooterSubsystem.setHoodSpeed(0), shooterSubsystem));
+        .whileTrue(
+            Commands.startEnd(
+                () -> shooterSubsystem.setHoodSpeed(.3),
+                () -> shooterSubsystem.setHoodSpeed(0),
+                shooterSubsystem));
   }
 
   // Make intake faster with buttons
