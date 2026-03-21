@@ -17,10 +17,10 @@ import frc.robot.util.TurnToPoseController;
 
 public class AimCommand extends Command {
 
-  Pose2d redTarget = new Pose2d(new Translation2d(11.9, 4.6), new Rotation2d(0));
-  Pose2d blueTarget = new Pose2d(new Translation2d(4.6, 4.0), new Rotation2d(0));
+  public static Pose2d redTarget = new Pose2d(new Translation2d(11.9, 4.0), new Rotation2d(0));
+  public static Pose2d blueTarget = new Pose2d(new Translation2d(4.6, 4.0), new Rotation2d(0));
 
-  TurnToPoseController turnController = new TurnToPoseController(3, 0, .1);
+  TurnToPoseController turnController = new TurnToPoseController(4, 0, .1);
 
   Drive m_Drive;
 

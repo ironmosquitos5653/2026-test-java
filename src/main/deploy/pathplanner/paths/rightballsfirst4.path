@@ -8,20 +8,20 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.106589446589448,
-        "y": 0.17703989703989687
+        "x": 4.721377091377092,
+        "y": 0.02528957528957554
       },
       "isLocked": false,
       "linkedName": "rbf3"
     },
     {
       "anchor": {
-        "x": 5.888687258681503,
-        "y": 3.142
+        "x": 5.877014157014157,
+        "y": 3.3988159588159603
       },
       "prevControl": {
-        "x": 7.161055341055341,
-        "y": 0.38715572715572755
+        "x": 7.149382239387995,
+        "y": 0.643971685971688
       },
       "nextControl": null,
       "isLocked": false,
@@ -30,7 +30,7 @@
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.23911111111111313,
+      "waypointRelativePos": 0.12000000000000086,
       "rotationDegrees": 0.0
     },
     {
@@ -39,7 +39,7 @@
     },
     {
       "waypointRelativePos": 0.7617777777777764,
-      "rotationDegrees": 90.05627608314
+      "rotationDegrees": -86.08149549135892
     }
   ],
   "constraintZones": [],
@@ -47,7 +47,7 @@
   "eventMarkers": [
     {
       "name": "IntakeOn",
-      "waypointRelativePos": 0.7421171171171201,
+      "waypointRelativePos": 0.5641891891891901,
       "endWaypointRelativePos": null,
       "command": null
     }
@@ -62,7 +62,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 86.98721249581658
+    "rotation": -90.69028269864114
   },
   "reversed": false,
   "folder": null,
