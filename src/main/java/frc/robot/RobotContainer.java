@@ -154,6 +154,15 @@ public class RobotContainer {
     controller2
         .leftBumper()
         .whileTrue(new SimpleShootCommand(shooterSubsystem, intakeSubsystem, drive, 3100, .05));
+
+    // Hood up and down.
+    controller2
+        .povDown()
+        .whileTrue(Commands.startEnd(() -> shooterSubsystem.setHoodSpeed(-.3),() -> shooterSubsystem.setHoodSpeed(0), shooterSubsystem));
+
+    controller2
+        .povUp()
+        .whileTrue(Commands.startEnd(() -> shooterSubsystem.setHoodSpeed(.3),() -> shooterSubsystem.setHoodSpeed(0), shooterSubsystem));
   }
 
   // Make intake faster with buttons
