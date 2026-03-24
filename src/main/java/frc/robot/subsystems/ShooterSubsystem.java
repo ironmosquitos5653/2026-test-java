@@ -30,17 +30,24 @@ public class ShooterSubsystem extends SubsystemBase {
   private SparkFlex hoodRotateMotor;
   private PIDController hoodEncoderPidController;
   private AbsoluteEncoder hoodEncoder = null;
-  private SparkClosedLoopController pid1;
-  private SparkClosedLoopController pid2;
-  private SparkClosedLoopController pid3;
-  private SparkMaxConfig config = new SparkMaxConfig();
 
-  private boolean shooting = false;
-  private double hoodPosition = .0;
+  private double hoodPosition = 0;
 
   FlywheelSubsystem fws1;
   FlywheelSubsystem fws2;
   FlywheelSubsystem fws3;
+
+  public static enum HoodPosition {
+    DOWN(0),
+    DEPLOY_CLIMB(0),
+    CLIMB(0);
+
+    public final int value;
+    HoodPosition(int v) {
+      value = v;
+    }
+  };
+
 
   public ShooterSubsystem() {
     shooter1Motor = new SparkFlex(shooterMotorCANId, MotorType.kBrushless);
@@ -77,7 +84,6 @@ public class ShooterSubsystem extends SubsystemBase {
     fws1.setTargetRPM(-speed);
     fws2.setTargetRPM(-speed);
     fws3.setTargetRPM(-speed);
-    shooting = speed != 0;
   }
 
   public void setAdvanceSpeed(double speed) {
@@ -85,12 +91,12 @@ public class ShooterSubsystem extends SubsystemBase {
     advance2Motor.set(speed);
   }
 
-  public void setHoodPosition(double position) {
-    hoodPosition = position;
+  public void setHoodPosition(HoodPosition position) {
+    setHoodPosition(position.value);
   }
 
-  public void setHoodSpeed(double speed) {
-    hoodRotateMotor.set(speed);
+  public void setHoodPosition(double position) {
+    hoodPosition = position;
   }
 
   public void dump() {
@@ -119,4 +125,13 @@ public class ShooterSubsystem extends SubsystemBase {
         return 0.0;
     }
   }
+
+  public void deployClimb() {
+    setHoodPosition(HoodPosition.DEPLOY_CLIMB);
+  }
+
+  public void climb() {
+    setHoodPosition(HoodPosition.CLIMB);
+  }
+
 }

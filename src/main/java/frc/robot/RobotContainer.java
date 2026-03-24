@@ -8,6 +8,8 @@
 package frc.robot;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.path.PathPlannerPath;
+
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -30,6 +32,9 @@ import frc.robot.subsystems.drive.GyroIOPigeon2;
 import frc.robot.subsystems.drive.ModuleIO;
 import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOSpark;
+import frc.robot.util.Aimer;
+import frc.robot.util.DistanceCalculator;
+
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 /**
@@ -44,6 +49,8 @@ public class RobotContainer {
   private final PhotonVisionSubsystem photonVisionSubsystem;
   private final ShooterSubsystem shooterSubsystem;
   private final IntakeSubsystem intakeSubsystem;
+  private final Aimer aimer;
+  private final DistanceCalculator distanceCalculator;
 
   private final AutonomousManager autonomousManager;
 
@@ -96,8 +103,10 @@ public class RobotContainer {
     shooterSubsystem = new ShooterSubsystem();
     intakeSubsystem = new IntakeSubsystem();
     // new DashboardSubsystem(drive, shooterSubsystem);
+    aimer = new Aimer(drive);
+    distanceCalculator = new DistanceCalculator(drive);
 
-    autonomousManager = new AutonomousManager(drive, shooterSubsystem, intakeSubsystem);
+    autonomousManager = new AutonomousManager(drive, shooterSubsystem, intakeSubsystem, distanceCalculator, aimer);
 
     // Set up auto routines
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
@@ -120,7 +129,8 @@ public class RobotContainer {
             drive,
             () -> -controller.getLeftY(),
             () -> -controller.getLeftX(),
-            () -> -controller.getRightX()));
+            () -> -controller.getRightX(),
+            aimer));
 
     // x wheels
     controller.x().onTrue(Commands.runOnce(drive::stopWithX, drive));
@@ -128,7 +138,7 @@ public class RobotContainer {
     // Shoot command
     controller
         .rightBumper()
-        .whileTrue(new ShootCommand(shooterSubsystem, intakeSubsystem, drive, false));
+        .whileTrue(new ShootCommand(shooterSubsystem, intakeSubsystem, drive, distanceCalculator, aimer, false));
 
     // Deploys intake and turns it on.
     controller.leftBumper().onTrue(new IntakeDeployCommand(intakeSubsystem));
@@ -160,23 +170,40 @@ public class RobotContainer {
     // Hood up and down.
     controller2
         .povDown()
-        .whileTrue(
-            Commands.startEnd(
-                () -> shooterSubsystem.setHoodSpeed(-.3),
-                () -> shooterSubsystem.setHoodSpeed(0),
+        .onTrue(
+            Commands.runOnce(
+                () -> shooterSubsystem.deployClimb(),
                 shooterSubsystem));
 
     controller2
         .povUp()
-        .whileTrue(
-            Commands.startEnd(
-                () -> shooterSubsystem.setHoodSpeed(.3),
-                () -> shooterSubsystem.setHoodSpeed(0),
+        .onTrue(
+            Commands.runOnce(
+                () -> shooterSubsystem.climb(),
                 shooterSubsystem));
+
+    controller2
+        .povLeft()
+        .onTrue(
+          Commands.sequence(
+            getCommandForPath("climbLineUp"),
+            getCommandForPath("middleClimb3")
+          )
+        );
   }
 
-  // Make intake faster with buttons
-  // set intake out -126
+  private Command getCommandForPath(String name) {
+
+    Command command = Commands.waitSeconds(1);
+    try {
+        String filePath = "/deploy/pathplanner/paths/" + name + ".path";
+        PathPlannerPath path = PathPlannerPath.fromPathFile(filePath);
+        command = AutoBuilder.followPath(path);
+    } catch (Exception ex) {
+      System.out.println(ex);
+    }
+    return command;
+  }
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.

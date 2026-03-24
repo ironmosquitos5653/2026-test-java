@@ -8,6 +8,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Timer;
@@ -22,26 +23,25 @@ import frc.robot.util.ShootData;
 import frc.robot.util.TurnToPoseController;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class ShootCommand extends Command {
+public class ShootAndIntakeCommand extends Command {
   ShooterSubsystem m_ShooterSubsystem;
   IntakeSubsystem m_IntakeSubsystem;
-  Drive m_drive;
-  TurnToPoseController turnController = new TurnToPoseController(4, 0, 0);
-  DistanceCalculator m_distanceCalculator;
+  DistanceCalculator m_DistanceCalculator;
   Aimer m_aimer;
+  Drive m_drive;
+  Timer timer = new Timer();
 
   public static Pose2d redTarget = new Pose2d(new Translation2d(11.9, 4.0), new Rotation2d(0));
   public static Pose2d blueTarget = new Pose2d(new Translation2d(4.6, 4.0), new Rotation2d(0));
 
   private boolean m_timed;
 
-  Timer timer = new Timer();
   private Timer intakeTimer;
   private boolean intakeIn;
   private boolean intakeOn = false;
 
   /** Creates a new ShootCommand. */
-  public ShootCommand(
+  public ShootAndIntakeCommand(
       ShooterSubsystem shooterSubsystem,
       IntakeSubsystem intakeSubsystem,
       Drive drive,
@@ -50,9 +50,9 @@ public class ShootCommand extends Command {
       boolean timed) {
     m_ShooterSubsystem = shooterSubsystem;
     m_IntakeSubsystem = intakeSubsystem;
-    m_distanceCalculator = distanceCalculator;
-    m_aimer = aimer;
     m_drive = drive;
+    m_DistanceCalculator = distanceCalculator;
+    m_aimer = aimer;
     m_timed = timed;
     addRequirements(shooterSubsystem, intakeSubsystem);
   }
@@ -65,16 +65,16 @@ public class ShootCommand extends Command {
     intakeIn = true;
     timer.reset();
     timer.start();
-    m_aimer.setTarget(m_distanceCalculator.getTargetPose2d());
     System.out.println("SHOOTING!!!");
     System.out.println("RainAndWalterAreAWESOME");
+    m_aimer.setTarget(m_DistanceCalculator.getTargetPose2d());
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
 
-    double[] calculations = m_distanceCalculator.getVelocityAndHood();
+    double[] calculations = m_DistanceCalculator.getVelocityAndHood();
     double velocity = calculations[0];
     double hood = calculations[1];
 
@@ -83,7 +83,6 @@ public class ShootCommand extends Command {
 
     if (m_ShooterSubsystem.getVelocity() < -velocity * .90) {
       m_ShooterSubsystem.setAdvanceSpeed(1);
-      jiggleIntake();
     }
   }
 
@@ -107,9 +106,19 @@ public class ShootCommand extends Command {
     return timer.hasElapsed(6);
   }
 
-  public void aim() {
-    double omega = m_drive.getTurnToPoseOutput(m_distanceCalculator.getTargetPose2d(), turnController);
-    m_drive.runVelocity(new ChassisSpeeds(0.0, 0.0, -omega));
+  public double geDistance() {
+    return getDistance(m_drive);
+  }
+
+  public static double getDistance(Drive drive) {
+    return drive.getPose().getTranslation().getDistance(getTargetPose2d().getTranslation());
+  }
+
+  public static Pose2d getTargetPose2d() {
+    if (DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red) {
+      return redTarget;
+    }
+    return blueTarget;
   }
 
   public void setHood(double position) {
@@ -118,45 +127,5 @@ public class ShootCommand extends Command {
   
   public void setShootSpeed(double velocity) {
     m_ShooterSubsystem.setShootSpeed(velocity);
-  }
-
-  private void jiggleIntake() {
-
-    if (!intakeOn) {
-      if (intakeTimer == null) {
-        intakeTimer = new Timer();
-        intakeTimer.start();
-      }
-
-      if (intakeTimer.hasElapsed(1)) {
-        intakeOn = true;
-        intakeTimer.reset();
-        intakeTimer.start();
-      } else {
-        return;
-      }
-    }
-
-    if (intakeTimer == null) {
-      intakeTimer = new Timer();
-      intakeTimer.start();
-    }
-    m_IntakeSubsystem.setIntakeSpeed(-1);
-
-    if (intakeIn && intakeTimer.hasElapsed(.5)) {
-      intakeIn = false;
-      intakeTimer.reset();
-      intakeTimer.start();
-    } else if (!intakeIn && intakeTimer.hasElapsed(.25)) {
-      intakeIn = true;
-      intakeTimer.reset();
-      intakeTimer.start();
-    }
-
-    if (intakeIn) {
-      m_IntakeSubsystem.setDeploySpeed(.4);
-    } else {
-      m_IntakeSubsystem.setDeploySpeed(-.4);
-    }
   }
 }

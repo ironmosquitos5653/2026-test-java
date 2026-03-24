@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.subsystems.ShooterSubsystem.HoodPosition;
 import frc.robot.subsystems.drive.Drive;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
@@ -59,7 +60,7 @@ public class SimpleShootCommand extends Command {
     m_ShooterSubsystem.setAdvanceSpeed(0);
     m_IntakeSubsystem.setDeploySpeed(0);
     m_IntakeSubsystem.setIntakeSpeed(0);
-    setHood(0);
+    m_ShooterSubsystem.setHoodPosition(HoodPosition.DOWN);
   }
 
   @Override
