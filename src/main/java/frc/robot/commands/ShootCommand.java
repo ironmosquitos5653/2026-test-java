@@ -29,17 +29,24 @@ public class ShootCommand extends Command {
   TurnToPoseController turnController = new TurnToPoseController(4, 0, 0);
   DistanceCalculator m_distanceCalculator;
   Aimer m_aimer;
-
-  public static Pose2d redTarget = new Pose2d(new Translation2d(11.9, 4.0), new Rotation2d(0));
-  public static Pose2d blueTarget = new Pose2d(new Translation2d(4.6, 4.0), new Rotation2d(0));
-
   private boolean m_timed;
 
   Timer timer = new Timer();
   private Timer intakeTimer;
   private boolean intakeIn;
   private boolean intakeOn = false;
+  private double m_shootTime = 6;
 
+  public ShootCommand(
+      ShooterSubsystem shooterSubsystem,
+      IntakeSubsystem intakeSubsystem,
+      Drive drive,
+      DistanceCalculator distanceCalculator,
+      Aimer aimer,
+      double shootTime) {
+        this(shooterSubsystem, intakeSubsystem, drive, distanceCalculator, aimer, true);
+        m_shootTime = shootTime;
+      }
   /** Creates a new ShootCommand. */
   public ShootCommand(
       ShooterSubsystem shooterSubsystem,
@@ -104,7 +111,7 @@ public class ShootCommand extends Command {
     // shoot while held.
     if (!m_timed) return false;
 
-    return timer.hasElapsed(6);
+    return timer.hasElapsed(m_shootTime);
   }
 
   public void aim() {

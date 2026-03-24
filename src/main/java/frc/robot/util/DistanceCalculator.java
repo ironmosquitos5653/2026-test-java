@@ -39,14 +39,19 @@ public Pose2d getTargetPose2d() {
   }
 
   public double[] getVelocityAndHood(Pose2d pose) {
-    double distance = getDistance(pose);
-    return getVelocityAndHood(distance);
+    return getVelocityAndHood(pose, ShootData.hubShootDatas);
   }
 
+  public double[] getVelocityAndHood(Pose2d pose, ShootData[] data) {
+    double distance = getDistance(pose);
+    return getVelocityAndHood(distance, data);
+  }
   public double[] getVelocityAndHood(double distance) {
+    ShootData[] data = ShootData.hubShootDatas;
+    return getVelocityAndHood(distance, data);
+  }
+  public double[] getVelocityAndHood(double distance, ShootData[] data) {
     // Use shootDatas to interpolate (or extrapolate) velocity and hood
-    ShootData[] data = ShootData.shootDatas;
-
     // If distance is below the first entry, extrapolate using first two
     if (distance <= data[0].distance()) {
       ShootData a = data[0];

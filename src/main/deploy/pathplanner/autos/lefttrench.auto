@@ -13,13 +13,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "left1"
+            "pathName": "leftTrench1"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "left2"
+            "pathName": "leftTrench2"
           }
         },
         {
@@ -37,7 +37,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "leftballsfirst4"
+            "pathName": "leftTrench4"
           }
         }
       ]

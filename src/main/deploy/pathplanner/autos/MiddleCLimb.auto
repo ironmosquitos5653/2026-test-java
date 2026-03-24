@@ -5,27 +5,21 @@
     "data": {
       "commands": [
         {
-          "type": "wait",
+          "type": "path",
           "data": {
-            "waitTime": 0.25
+            "pathName": "MiddleClimb1"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "rightballsfirst1"
+            "pathName": "MiddleClimb2"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "rightballsfirst2"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "rightballsfirst3"
+            "pathName": "MiddleClimb3"
           }
         },
         {
@@ -35,9 +29,21 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "DeployClimb"
+          }
+        },
+        {
           "type": "path",
           "data": {
-            "pathName": "rightballsfirst4"
+            "pathName": "MiddleClimb4"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Climb"
           }
         }
       ]
