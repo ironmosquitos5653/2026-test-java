@@ -31,7 +31,6 @@ public class ShooterSubsystem extends SubsystemBase {
   private PIDController hoodEncoderPidController;
   private AbsoluteEncoder hoodEncoder = null;
 
-  private double hoodPosition = 0;
 
   FlywheelSubsystem fws1;
   FlywheelSubsystem fws2;
@@ -48,6 +47,8 @@ public class ShooterSubsystem extends SubsystemBase {
       value = v;
     }
   };
+
+  private double hoodPosition = HoodPosition.DOWN.value;
 
 
   public ShooterSubsystem() {
