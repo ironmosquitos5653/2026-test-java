@@ -1,5 +1,7 @@
 package frc.robot.util;
 
+import com.pathplanner.lib.controllers.PPHolonomicDriveController;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import frc.robot.subsystems.drive.Drive;
 
@@ -16,6 +18,11 @@ public class Aimer {
 
     public void setTarget(Pose2d t) {
         target = t;
+        if (target != null) {
+            PPHolonomicDriveController.overrideRotationFeedback(this::calculate);
+        } else {
+            PPHolonomicDriveController.clearRotationFeedbackOverride();
+        }
     }
 
     public boolean hasTarget() {
@@ -25,5 +32,4 @@ public class Aimer {
     public double calculate() {
         return turnController.calculate(m_drive.getPose(), target);
     }
-    
 }

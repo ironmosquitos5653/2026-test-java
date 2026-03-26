@@ -38,12 +38,13 @@ public class ShooterSubsystem extends SubsystemBase {
   FlywheelSubsystem fws3;
 
   public static enum HoodPosition {
-    DOWN(0),
-    DEPLOY_CLIMB(0),
-    CLIMB(0);
+    DOWN(0.019),
+    DEPLOY_CLIMB(.165),
+    CLIMB(.056),
+    MAX(0);
 
-    public final int value;
-    HoodPosition(int v) {
+    public final double value;
+    HoodPosition(double v) {
       value = v;
     }
   };

@@ -40,8 +40,11 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants;
 import frc.robot.Constants.Mode;
 import frc.robot.commands.ShootCommand;
+import frc.robot.util.Aimer;
 import frc.robot.util.LocalADStarAK;
 import frc.robot.util.TurnToPoseController;
+
+import java.util.Optional;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import org.littletonrobotics.junction.AutoLogOutput;
@@ -55,6 +58,7 @@ public class Drive extends SubsystemBase {
   private final SysIdRoutine sysId;
   private final Alert gyroDisconnectedAlert =
       new Alert("Disconnected gyro, using kinematics as fallback.", AlertType.kError);
+  private Aimer m_aimer = null;
 
   private SwerveDriveKinematics kinematics = new SwerveDriveKinematics(moduleTranslations);
   private Rotation2d rawGyroRotation = Rotation2d.kZero;
@@ -324,5 +328,9 @@ public class Drive extends SubsystemBase {
 
   public double getDriveVelocity(int moduleIndex) {
     return modules[moduleIndex].getState().speedMetersPerSecond;
+  }
+
+  public void setAimer(Aimer aimer) {
+    m_aimer = aimer;
   }
 }
