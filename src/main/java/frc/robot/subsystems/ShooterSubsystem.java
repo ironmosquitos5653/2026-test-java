@@ -36,7 +36,7 @@ public class ShooterSubsystem extends SubsystemBase {
   private SparkMaxConfig config = new SparkMaxConfig();
 
   private boolean shooting = false;
-  private double hoodPosition = .0;
+  private double hoodPosition = .019;
 
   FlywheelSubsystem fws1;
   FlywheelSubsystem fws2;
@@ -68,7 +68,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
     hoodEncoderPidController.setSetpoint(hoodPosition);
     double speed = hoodEncoderPidController.calculate(hoodEncoder.getPosition());
-    //hoodRotateMotor.set(speed);
+    hoodRotateMotor.set(speed);
     SmartDashboard.putNumber("HoodSpeed", speed);
     SmartDashboard.putNumber("Hood Encoder", hoodEncoder.getPosition());
   }
@@ -86,6 +86,9 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   public void setHoodPosition(double position) {
+    if (position < .019) {
+      position = .019;
+    }
     hoodPosition = position;
   }
 
