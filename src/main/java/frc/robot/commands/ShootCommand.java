@@ -75,6 +75,7 @@ public class ShootCommand extends Command {
   @Override
   public void execute() {
 
+    // aim();
     double[] calculations = m_distanceCalculator.getVelocityAndHood();
     double velocity = calculations[0];
     double hood = calculations[1];
@@ -109,14 +110,10 @@ public class ShootCommand extends Command {
   }
 
   public void aim() {
-<<<<<<< Updated upstream
-    //double omega = m_drive.getTurnToPoseOutput(m_distanceCalculator.getTargetPose2d(), turnController);
-    //m_drive.runVelocity(new ChassisSpeeds(0.0, 0.0, -omega));
-=======
+
     double omega =
         m_drive.getTurnToPoseOutput(m_distanceCalculator.getTargetPose2d(), turnController);
     m_drive.runVelocity(new ChassisSpeeds(0.0, 0.0, -omega));
->>>>>>> Stashed changes
   }
 
   public void setHood(double position) {

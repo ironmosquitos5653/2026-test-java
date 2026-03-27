@@ -80,15 +80,9 @@ public class DriveCommands {
           // Square rotation value for more precise control
           omega = Math.copySign(omega * omega, omega);
 
-<<<<<<< Updated upstream
-          //if (aimer.hasTarget()) {
-            //omega = aimer.calculate();
-          //} 
-=======
           if (aimer.hasTarget()) {
             omega = aimer.calculate();
           }
->>>>>>> Stashed changes
 
           // Convert to field relative speeds & send command
           ChassisSpeeds speeds =

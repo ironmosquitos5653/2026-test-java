@@ -74,7 +74,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
     hoodEncoderPidController.setSetpoint(hoodPosition);
     double speed = hoodEncoderPidController.calculate(hoodEncoder.getPosition());
-    // hoodRotateMotor.set(speed);
+    hoodRotateMotor.set(speed);
     SmartDashboard.putNumber("HoodSpeed", speed);
     SmartDashboard.putNumber("Hood Encoder", hoodEncoder.getPosition());
   }
