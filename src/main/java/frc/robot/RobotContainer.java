@@ -20,6 +20,7 @@ import frc.robot.commands.DriveCommands;
 import frc.robot.commands.IntakeDeployCommand;
 import frc.robot.commands.IntakeToggleCommad;
 import frc.robot.commands.ReverseCommand;
+import frc.robot.commands.ShootAndIntakeCommand;
 import frc.robot.commands.ShootCommand;
 import frc.robot.commands.SimpleShootCommand;
 import frc.robot.subsystems.AutonomousManager;
@@ -161,7 +162,8 @@ public class RobotContainer {
     //  Change these values to test for corner shoot.
     controller2
         .rightBumper()
-        .whileTrue(new SimpleShootCommand(shooterSubsystem, intakeSubsystem, drive, 3950, .085));
+        .whileTrue(new ShootAndIntakeCommand(shooterSubsystem, intakeSubsystem, drive, distanceCalculator, aimer, false));
+        //.whileTrue(new SimpleShootCommand(shooterSubsystem, intakeSubsystem, drive, 3950, .085));
 
     controller2
         .leftBumper()

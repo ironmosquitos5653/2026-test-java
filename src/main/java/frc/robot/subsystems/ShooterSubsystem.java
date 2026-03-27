@@ -98,6 +98,11 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   public void setHoodPosition(double position) {
+    // do not let it go below bottom.
+    if (hoodPosition < HoodPosition.DOWN.value) {
+      position = HoodPosition.DOWN.value;
+    }
+
     hoodPosition = position;
   }
 
@@ -105,10 +110,6 @@ public class ShooterSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("RPM 1 start", shooter1Motor.getEncoder().getVelocity());
     SmartDashboard.putNumber("RPM 2 start", shooter2Motor.getEncoder().getVelocity());
     SmartDashboard.putNumber("RPM 3 start", shooter3Motor.getEncoder().getVelocity());
-  }
-
-  public boolean isHoodDown() {
-    return hoodEncoder.getPosition() < .02 || hoodEncoder.getPosition() > .9;
   }
 
   public double getVelocity() {
