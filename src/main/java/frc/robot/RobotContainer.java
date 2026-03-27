@@ -104,8 +104,8 @@ public class RobotContainer {
     shooterSubsystem = new ShooterSubsystem();
     intakeSubsystem = new IntakeSubsystem();
     // new DashboardSubsystem(drive, shooterSubsystem);
-    aimer = new Aimer(drive);
     distanceCalculator = new DistanceCalculator(drive);
+    aimer = new Aimer(drive, distanceCalculator);
 
     autonomousManager = new AutonomousManager(drive, shooterSubsystem, intakeSubsystem, distanceCalculator, aimer);
 

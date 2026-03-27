@@ -48,7 +48,7 @@ public class ShootAndIntakeCommand extends Command {
     timer.start();
     System.out.println("SHOOTING!!!");
     System.out.println("RainAndWalterAreAWESOME...veryAwesome");
-    m_aimer.setTarget(m_DistanceCalculator.getTargetPose2d());
+    m_aimer.setTarget(m_aimer.getTargetPose());
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -66,9 +66,9 @@ public class ShootAndIntakeCommand extends Command {
       m_ShooterSubsystem.setAdvanceSpeed(1);
     }
     if(timer.hasElapsed(1)){
-       m_IntakeSubsystem.setDeploySpeed(-.25);
-    }else{
        m_IntakeSubsystem.setDeploySpeed(0);
+    }else{
+       m_IntakeSubsystem.setDeploySpeed(-.25);
     }
     
     m_IntakeSubsystem.setIntakeSpeed(-1);

@@ -9,11 +9,13 @@ public class Aimer {
 
     private final TurnToPoseController turnController = new TurnToPoseController(4, 0, 0);
     private final Drive m_drive;
+    private final DistanceCalculator m_DistanceCalculator;
 
     private Pose2d target;
 
-    public Aimer(Drive drive) {
+    public Aimer(Drive drive, DistanceCalculator distanceCalculator) {
         m_drive = drive;
+        m_DistanceCalculator = distanceCalculator;
     }
 
     public void setTarget(Pose2d t) {
@@ -32,4 +34,32 @@ public class Aimer {
     public double calculate() {
         return turnController.calculate(m_drive.getPose(), target);
     }
+
+  private Pose2d blueLeft = new Pose2d(.5, 7.5, null);
+  private Pose2d blueRight = new Pose2d(.5, 0.5, null);
+  private Pose2d redLeft = new Pose2d(16, .5, null);
+  private Pose2d redRight = new Pose2d(16, 7.5, null);
+
+  public Pose2d getTargetPose() {
+    Pose2d currentPose2d = m_drive.getPose();
+    if (m_DistanceCalculator.isBlue()) {
+      if (currentPose2d.getX() < 4.9) {
+        return m_DistanceCalculator.getTargetPose2d();
+      }
+        if(currentPose2d.getY() < 4) {
+          return blueRight;
+        } else {
+          return blueLeft;
+        }
+    } else {
+       if (currentPose2d.getX() > 11.7) {
+        return m_DistanceCalculator.getTargetPose2d();
+      }
+        if(currentPose2d.getY() < 4) {
+          return redLeft;
+        } else {
+          return redRight;
+        }
+    }
+  }
 }
