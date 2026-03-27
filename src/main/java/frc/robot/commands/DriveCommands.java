@@ -81,7 +81,7 @@ public class DriveCommands {
           omega = Math.copySign(omega * omega, omega);
 
           if (aimer.hasTarget()) {
-            omega = aimer.calculate();
+            omega = -aimer.calculate();
           }
 
           // Convert to field relative speeds & send command

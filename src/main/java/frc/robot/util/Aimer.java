@@ -5,7 +5,7 @@ import frc.robot.subsystems.drive.Drive;
 
 public class Aimer {
 
-  private final TurnToPoseController turnController = new TurnToPoseController(4, 0, 0);
+  private final TurnToPoseController turnController = new TurnToPoseController(1, 0, .1);
   private final Drive m_drive;
   private final DistanceCalculator m_DistanceCalculator;
 
