@@ -41,19 +41,43 @@ public class AutonomousManager {
 
   public void initialize() {
     register("IntakeOn", new IntakeDeployCommand(m_IntakeSubsystem));
-    register("ShootTimed", new ShootCommand(m_ShooterSubsystem, m_IntakeSubsystem, m_Drive, m_DistanceCalculator, m_aimer, 2.5));
-    register("Shoot", new ShootCommand(m_ShooterSubsystem, m_IntakeSubsystem, m_Drive, m_DistanceCalculator, m_aimer, true));
-    register("ShootNmove", new SimpleShootAndIntakeCommand(m_ShooterSubsystem, m_IntakeSubsystem, m_Drive, m_DistanceCalculator, true));
-    register("Shimtake", new SimpleShootAndIntakeCommand(m_ShooterSubsystem, m_IntakeSubsystem, m_Drive, m_DistanceCalculator, false));
-    register("ShootOff", Commands.runOnce(() -> SimpleShootAndIntakeCommand.finished = true, m_ShooterSubsystem, m_IntakeSubsystem));
-    register("FirstShoot", new FirstShootCommand(m_ShooterSubsystem, m_Drive, m_DistanceCalculator));
-    register("IntakeIn", Commands.startEnd(() -> m_IntakeSubsystem.setDeploySpeed(0),
-                                          () -> m_IntakeSubsystem.setDeploySpeed(0),
-                                          m_IntakeSubsystem)
-                                          .withTimeout(.5));
-    register("DeployClimb", Commands.runOnce(() -> m_ShooterSubsystem.deployClimb(), m_ShooterSubsystem));
-    register("Climb", Commands.runOnce(() -> m_ShooterSubsystem.setHoodPosition(0), m_ShooterSubsystem));
-    
+    register(
+        "ShootTimed",
+        new ShootCommand(
+            m_ShooterSubsystem, m_IntakeSubsystem, m_Drive, m_DistanceCalculator, m_aimer, 2.5));
+    register(
+        "Shoot",
+        new ShootCommand(
+            m_ShooterSubsystem, m_IntakeSubsystem, m_Drive, m_DistanceCalculator, m_aimer, true));
+    register(
+        "ShootNmove",
+        new SimpleShootAndIntakeCommand(
+            m_ShooterSubsystem, m_IntakeSubsystem, m_Drive, m_DistanceCalculator, true));
+    register(
+        "Shimtake",
+        new SimpleShootAndIntakeCommand(
+            m_ShooterSubsystem, m_IntakeSubsystem, m_Drive, m_DistanceCalculator, false));
+    register(
+        "ShootOff",
+        Commands.runOnce(
+            () -> SimpleShootAndIntakeCommand.finished = true,
+            m_ShooterSubsystem,
+            m_IntakeSubsystem));
+    register(
+        "FirstShoot", new FirstShootCommand(m_ShooterSubsystem, m_Drive, m_DistanceCalculator));
+    register(
+        "IntakeIn",
+        Commands.startEnd(
+                () -> m_IntakeSubsystem.setDeploySpeed(0),
+                () -> m_IntakeSubsystem.setDeploySpeed(0),
+                m_IntakeSubsystem)
+            .withTimeout(.5));
+    register(
+        "DeployClimb",
+        Commands.runOnce(() -> m_ShooterSubsystem.deployClimb(), m_ShooterSubsystem));
+    register(
+        "Climb", Commands.runOnce(() -> m_ShooterSubsystem.setHoodPosition(0), m_ShooterSubsystem));
+
     new EventTrigger("IntakeOn").onTrue(new IntakeDeployCommand(m_IntakeSubsystem));
   }
 

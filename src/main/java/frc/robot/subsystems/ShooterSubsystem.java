@@ -5,10 +5,8 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.AbsoluteEncoder;
-import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
-import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -31,7 +29,6 @@ public class ShooterSubsystem extends SubsystemBase {
   private PIDController hoodEncoderPidController;
   private AbsoluteEncoder hoodEncoder = null;
 
-
   FlywheelSubsystem fws1;
   FlywheelSubsystem fws2;
   FlywheelSubsystem fws3;
@@ -43,13 +40,13 @@ public class ShooterSubsystem extends SubsystemBase {
     MAX(0);
 
     public final double value;
+
     HoodPosition(double v) {
       value = v;
     }
   };
 
   private double hoodPosition = HoodPosition.DOWN.value;
-
 
   public ShooterSubsystem() {
     shooter1Motor = new SparkFlex(shooterMotorCANId, MotorType.kBrushless);
@@ -77,7 +74,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
     hoodEncoderPidController.setSetpoint(hoodPosition);
     double speed = hoodEncoderPidController.calculate(hoodEncoder.getPosition());
-    //hoodRotateMotor.set(speed);
+    // hoodRotateMotor.set(speed);
     SmartDashboard.putNumber("HoodSpeed", speed);
     SmartDashboard.putNumber("Hood Encoder", hoodEncoder.getPosition());
   }
@@ -136,5 +133,4 @@ public class ShooterSubsystem extends SubsystemBase {
   public void climb() {
     setHoodPosition(HoodPosition.CLIMB);
   }
-
 }

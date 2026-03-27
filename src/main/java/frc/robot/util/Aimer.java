@@ -1,39 +1,38 @@
 package frc.robot.util;
 
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
-
 import edu.wpi.first.math.geometry.Pose2d;
 import frc.robot.subsystems.drive.Drive;
 
 public class Aimer {
 
-    private final TurnToPoseController turnController = new TurnToPoseController(4, 0, 0);
-    private final Drive m_drive;
-    private final DistanceCalculator m_DistanceCalculator;
+  private final TurnToPoseController turnController = new TurnToPoseController(4, 0, 0);
+  private final Drive m_drive;
+  private final DistanceCalculator m_DistanceCalculator;
 
-    private Pose2d target;
+  private Pose2d target;
 
-    public Aimer(Drive drive, DistanceCalculator distanceCalculator) {
-        m_drive = drive;
-        m_DistanceCalculator = distanceCalculator;
+  public Aimer(Drive drive, DistanceCalculator distanceCalculator) {
+    m_drive = drive;
+    m_DistanceCalculator = distanceCalculator;
+  }
+
+  public void setTarget(Pose2d t) {
+    target = t;
+    if (target != null) {
+      PPHolonomicDriveController.overrideRotationFeedback(this::calculate);
+    } else {
+      PPHolonomicDriveController.clearRotationFeedbackOverride();
     }
+  }
 
-    public void setTarget(Pose2d t) {
-        target = t;
-        if (target != null) {
-            PPHolonomicDriveController.overrideRotationFeedback(this::calculate);
-        } else {
-            PPHolonomicDriveController.clearRotationFeedbackOverride();
-        }
-    }
+  public boolean hasTarget() {
+    return target != null;
+  }
 
-    public boolean hasTarget() {
-        return target != null;
-    }
-
-    public double calculate() {
-        return turnController.calculate(m_drive.getPose(), target);
-    }
+  public double calculate() {
+    return turnController.calculate(m_drive.getPose(), target);
+  }
 
   private Pose2d blueLeft = new Pose2d(.5, 7.5, null);
   private Pose2d blueRight = new Pose2d(.5, 0.5, null);
@@ -46,20 +45,20 @@ public class Aimer {
       if (currentPose2d.getX() < 4.9) {
         return m_DistanceCalculator.getTargetPose2d();
       }
-        if(currentPose2d.getY() < 4) {
-          return blueRight;
-        } else {
-          return blueLeft;
-        }
+      if (currentPose2d.getY() < 4) {
+        return blueRight;
+      } else {
+        return blueLeft;
+      }
     } else {
-       if (currentPose2d.getX() > 11.7) {
+      if (currentPose2d.getX() > 11.7) {
         return m_DistanceCalculator.getTargetPose2d();
       }
-        if(currentPose2d.getY() < 4) {
-          return redLeft;
-        } else {
-          return redRight;
-        }
+      if (currentPose2d.getY() < 4) {
+        return redLeft;
+      } else {
+        return redRight;
+      }
     }
   }
 }

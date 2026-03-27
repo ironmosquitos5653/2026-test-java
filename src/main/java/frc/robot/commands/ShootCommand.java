@@ -4,12 +4,7 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.IntakeSubsystem;
@@ -18,7 +13,6 @@ import frc.robot.subsystems.ShooterSubsystem.HoodPosition;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.util.Aimer;
 import frc.robot.util.DistanceCalculator;
-import frc.robot.util.ShootData;
 import frc.robot.util.TurnToPoseController;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
@@ -44,9 +38,9 @@ public class ShootCommand extends Command {
       DistanceCalculator distanceCalculator,
       Aimer aimer,
       double shootTime) {
-        this(shooterSubsystem, intakeSubsystem, drive, distanceCalculator, aimer, true);
-        m_shootTime = shootTime;
-      }
+    this(shooterSubsystem, intakeSubsystem, drive, distanceCalculator, aimer, true);
+    m_shootTime = shootTime;
+  }
   /** Creates a new ShootCommand. */
   public ShootCommand(
       ShooterSubsystem shooterSubsystem,
@@ -115,14 +109,20 @@ public class ShootCommand extends Command {
   }
 
   public void aim() {
+<<<<<<< Updated upstream
     //double omega = m_drive.getTurnToPoseOutput(m_distanceCalculator.getTargetPose2d(), turnController);
     //m_drive.runVelocity(new ChassisSpeeds(0.0, 0.0, -omega));
+=======
+    double omega =
+        m_drive.getTurnToPoseOutput(m_distanceCalculator.getTargetPose2d(), turnController);
+    m_drive.runVelocity(new ChassisSpeeds(0.0, 0.0, -omega));
+>>>>>>> Stashed changes
   }
 
   public void setHood(double position) {
     m_ShooterSubsystem.setHoodPosition(position);
   }
-  
+
   public void setShootSpeed(double velocity) {
     m_ShooterSubsystem.setShootSpeed(velocity);
   }

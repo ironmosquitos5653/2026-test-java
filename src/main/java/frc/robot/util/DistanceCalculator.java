@@ -15,15 +15,14 @@ public class DistanceCalculator {
   private final Drive m_drive;
 
   public DistanceCalculator(Drive drive) {
-        m_drive = drive;
+    m_drive = drive;
   }
 
-
-public boolean isBlue() {
+  public boolean isBlue() {
     return DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Blue;
-}
+  }
 
-public Pose2d getTargetPose2d() {
+  public Pose2d getTargetPose2d() {
     if (DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red) {
       return redTarget;
     }
@@ -50,10 +49,12 @@ public Pose2d getTargetPose2d() {
     double distance = getDistance(pose);
     return getVelocityAndHood(distance, data);
   }
+
   public double[] getVelocityAndHood(double distance) {
     ShootData[] data = ShootData.hubShootDatas;
     return getVelocityAndHood(distance, data);
   }
+
   public double[] getVelocityAndHood(double distance, ShootData[] data) {
     // Use shootDatas to interpolate (or extrapolate) velocity and hood
     // If distance is below the first entry, extrapolate using first two
@@ -104,5 +105,4 @@ public Pose2d getTargetPose2d() {
     }
     return new double[] {closest.velocity(), closest.hood()};
   }
-
 }
