@@ -19,6 +19,10 @@ public class DistanceCalculator {
   }
 
 
+public boolean isBlue() {
+    return DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Blue;
+}
+
 public Pose2d getTargetPose2d() {
     if (DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red) {
       return redTarget;
