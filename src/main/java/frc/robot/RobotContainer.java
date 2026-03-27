@@ -9,6 +9,7 @@ package frc.robot;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.path.PathPlannerPath;
+
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -34,6 +35,7 @@ import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOSpark;
 import frc.robot.util.Aimer;
 import frc.robot.util.DistanceCalculator;
+
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 /**
@@ -105,8 +107,7 @@ public class RobotContainer {
     distanceCalculator = new DistanceCalculator(drive);
     aimer = new Aimer(drive, distanceCalculator);
 
-    autonomousManager =
-        new AutonomousManager(drive, shooterSubsystem, intakeSubsystem, distanceCalculator, aimer);
+    autonomousManager = new AutonomousManager(drive, shooterSubsystem, intakeSubsystem, distanceCalculator, aimer);
 
     // Set up auto routines
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
@@ -138,9 +139,7 @@ public class RobotContainer {
     // Shoot command
     controller
         .rightBumper()
-        .whileTrue(
-            new ShootCommand(
-                shooterSubsystem, intakeSubsystem, drive, distanceCalculator, aimer, false));
+        .whileTrue(new ShootCommand(shooterSubsystem, intakeSubsystem, drive, distanceCalculator, aimer, false));
 
     // Deploys intake and turns it on.
     controller.leftBumper().onTrue(new IntakeDeployCommand(intakeSubsystem));
@@ -163,10 +162,8 @@ public class RobotContainer {
     //  Change these values to test for corner shoot.
     controller2
         .rightBumper()
-        .whileTrue(
-            new ShootAndIntakeCommand(
-                shooterSubsystem, intakeSubsystem, drive, distanceCalculator, aimer, false));
-    // .whileTrue(new SimpleShootCommand(shooterSubsystem, intakeSubsystem, drive, 3950, .085));
+        .whileTrue(new ShootAndIntakeCommand(shooterSubsystem, intakeSubsystem, drive, distanceCalculator, aimer, false));
+        //.whileTrue(new SimpleShootCommand(shooterSubsystem, intakeSubsystem, drive, 3950, .085));
 
     controller2
         .leftBumper()
@@ -175,23 +172,35 @@ public class RobotContainer {
     // Hood up and down.
     controller2
         .povDown()
-        .onTrue(Commands.runOnce(() -> shooterSubsystem.deployClimb(), shooterSubsystem));
+        .onTrue(
+            Commands.runOnce(
+                () -> shooterSubsystem.deployClimb(),
+                shooterSubsystem));
 
-    controller2.povUp().onTrue(Commands.runOnce(() -> shooterSubsystem.climb(), shooterSubsystem));
+    controller2
+        .povUp()
+        .onTrue(
+            Commands.runOnce(
+                () -> shooterSubsystem.climb(),
+                shooterSubsystem));
 
     controller2
         .povLeft()
         .onTrue(
-            Commands.sequence(getCommandForPath("climbLineUp"), getCommandForPath("middleClimb3")));
+          Commands.sequence(
+            getCommandForPath("climbLineUp"),
+            getCommandForPath("middleClimb3")
+          )
+        );
   }
 
   private Command getCommandForPath(String name) {
 
     Command command = Commands.waitSeconds(1);
     try {
-      String filePath = "/deploy/pathplanner/paths/" + name + ".path";
-      PathPlannerPath path = PathPlannerPath.fromPathFile(filePath);
-      command = AutoBuilder.followPath(path);
+        String filePath = "/deploy/pathplanner/paths/" + name + ".path";
+        PathPlannerPath path = PathPlannerPath.fromPathFile(filePath);
+        command = AutoBuilder.followPath(path);
     } catch (Exception ex) {
       System.out.println(ex);
     }

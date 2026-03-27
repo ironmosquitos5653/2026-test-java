@@ -65,13 +65,14 @@ public class ShootAndIntakeCommand extends Command {
     if (m_ShooterSubsystem.getVelocity() < -velocity * .90) {
       m_ShooterSubsystem.setAdvanceSpeed(1);
     }
-    if (timer.hasElapsed(1)) {
-      m_IntakeSubsystem.setDeploySpeed(0);
-    } else {
-      m_IntakeSubsystem.setDeploySpeed(-.25);
+    if(timer.hasElapsed(1)){
+       m_IntakeSubsystem.setDeploySpeed(0);
+    }else{
+       m_IntakeSubsystem.setDeploySpeed(-.25);
     }
-
+    
     m_IntakeSubsystem.setIntakeSpeed(-1);
+
   }
 
   // Called once the command ends or is interrupted.
@@ -97,7 +98,7 @@ public class ShootAndIntakeCommand extends Command {
   public void setHood(double position) {
     m_ShooterSubsystem.setHoodPosition(position);
   }
-
+  
   public void setShootSpeed(double velocity) {
     m_ShooterSubsystem.setShootSpeed(velocity);
   }

@@ -25,6 +25,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.DriveConstants;
 import frc.robot.util.Aimer;
+
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.LinkedList;
@@ -84,6 +85,7 @@ public class DriveCommands {
             omega = -aimer.calculate();
           }
 
+
           // Convert to field relative speeds & send command
           ChassisSpeeds speeds =
               new ChassisSpeeds(
@@ -93,10 +95,12 @@ public class DriveCommands {
           boolean isFlipped =
               DriverStation.getAlliance().isPresent()
                   && DriverStation.getAlliance().get() == Alliance.Red;
-
-          Rotation2d turnVelocity =
-              isFlipped ? drive.getRotation().plus(new Rotation2d(Math.PI)) : drive.getRotation();
-
+          
+          Rotation2d turnVelocity = isFlipped
+                      ? drive.getRotation().plus(new Rotation2d(Math.PI))
+                      : drive.getRotation();
+          
+          
           drive.runVelocity(
               ChassisSpeeds.fromFieldRelativeSpeeds(
                   speeds,

@@ -35,7 +35,7 @@ public class SimpleShootAndIntakeCommand extends Command {
     m_IntakeSubsystem = intakeSubsystem;
     m_drive = drive;
     m_DistanceCalculator = distanceCalculator;
-    m_shootAtHub = shootAtHub;
+    m_shootAtHub = shootAtHub;    
     addRequirements(shooterSubsystem, intakeSubsystem);
   }
 
@@ -56,8 +56,7 @@ public class SimpleShootAndIntakeCommand extends Command {
     if (m_shootAtHub) {
       calculations = m_DistanceCalculator.getVelocityAndHood();
     } else {
-      calculations =
-          m_DistanceCalculator.getVelocityAndHood(m_targetPose, ShootData.backFieldShootDatas);
+      calculations = m_DistanceCalculator.getVelocityAndHood(m_targetPose, ShootData.backFieldShootDatas);
     }
     double velocity = calculations[0];
     double hood = calculations[1];
@@ -68,8 +67,9 @@ public class SimpleShootAndIntakeCommand extends Command {
     if (m_ShooterSubsystem.getVelocity() < -velocity * .90) {
       m_ShooterSubsystem.setAdvanceSpeed(1);
     }
-
+    
     m_IntakeSubsystem.setIntakeSpeed(-1);
+
   }
 
   // Called once the command ends or is interrupted.
@@ -85,11 +85,10 @@ public class SimpleShootAndIntakeCommand extends Command {
   public boolean isFinished() {
     return finished;
   }
-
   public void setHood(double position) {
     m_ShooterSubsystem.setHoodPosition(position);
   }
-
+  
   public void setShootSpeed(double velocity) {
     m_ShooterSubsystem.setShootSpeed(velocity);
   }
@@ -105,13 +104,13 @@ public class SimpleShootAndIntakeCommand extends Command {
     } else {
       Pose2d currentPose2d = m_drive.getPose();
       if (currentPose2d.getX() < 8) {
-        if (currentPose2d.getY() < 4) {
+        if(currentPose2d.getY() < 4) {
           return blueRight;
         } else {
           return blueLeft;
         }
       } else {
-        if (currentPose2d.getY() < 4) {
+        if(currentPose2d.getY() < 4) {
           return redRight;
         } else {
           return redLeft;
@@ -120,3 +119,6 @@ public class SimpleShootAndIntakeCommand extends Command {
     }
   }
 }
+
+
+

@@ -20,8 +20,7 @@ public class FirstShootCommand extends Command {
   Timer timer = new Timer();
 
   /** Creates a new ShootCommand. */
-  public FirstShootCommand(
-      ShooterSubsystem shooterSubsystem, Drive drive, DistanceCalculator distanceCalculator) {
+  public FirstShootCommand(ShooterSubsystem shooterSubsystem, Drive drive, DistanceCalculator distanceCalculator) {
     m_ShooterSubsystem = shooterSubsystem;
     m_drive = drive;
     m_distanceCalculator = distanceCalculator;
@@ -69,8 +68,7 @@ public class FirstShootCommand extends Command {
   TurnToPoseController turnController = new TurnToPoseController(1, 0, 0);
 
   public void aim() {
-    double omega =
-        m_drive.getTurnToPoseOutput(m_distanceCalculator.getTargetPose2d(), turnController);
+    double omega = m_drive.getTurnToPoseOutput(m_distanceCalculator.getTargetPose2d(), turnController);
     m_drive.runVelocity(new ChassisSpeeds(0.0, 0.0, -omega));
   }
 
