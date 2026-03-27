@@ -115,8 +115,8 @@ public class ShootCommand extends Command {
   }
 
   public void aim() {
-    double omega = m_drive.getTurnToPoseOutput(m_distanceCalculator.getTargetPose2d(), turnController);
-    m_drive.runVelocity(new ChassisSpeeds(0.0, 0.0, -omega));
+    //double omega = m_drive.getTurnToPoseOutput(m_distanceCalculator.getTargetPose2d(), turnController);
+    //m_drive.runVelocity(new ChassisSpeeds(0.0, 0.0, -omega));
   }
 
   public void setHood(double position) {
