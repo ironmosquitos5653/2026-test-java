@@ -13,17 +13,17 @@ public class DistanceCalculator {
   public static Pose2d blueTarget = new Pose2d(new Translation2d(4.6, 4.0), new Rotation2d(0));
 
   private final Drive m_drive;
+  public Aimer m_aimer;
 
   public DistanceCalculator(Drive drive) {
-        m_drive = drive;
+    m_drive = drive;
   }
 
-
-public boolean isBlue() {
+  public boolean isBlue() {
     return DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Blue;
-}
+  }
 
-public Pose2d getTargetPose2d() {
+  public Pose2d getTargetPose2d() {
     if (DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red) {
       return redTarget;
     }
@@ -43,17 +43,23 @@ public Pose2d getTargetPose2d() {
   }
 
   public double[] getVelocityAndHood(Pose2d pose) {
-    return getVelocityAndHood(pose, ShootData.hubShootDatas);
+    ShootData[] shootDatas = ShootData.hubShootDatas;
+    if (!m_aimer.isBackField()) {
+      shootDatas = ShootData.backFieldShootDatas;
+    }
+    return getVelocityAndHood(pose, shootDatas);
   }
 
   public double[] getVelocityAndHood(Pose2d pose, ShootData[] data) {
     double distance = getDistance(pose);
     return getVelocityAndHood(distance, data);
   }
+
   public double[] getVelocityAndHood(double distance) {
     ShootData[] data = ShootData.hubShootDatas;
     return getVelocityAndHood(distance, data);
   }
+
   public double[] getVelocityAndHood(double distance, ShootData[] data) {
     // Use shootDatas to interpolate (or extrapolate) velocity and hood
     // If distance is below the first entry, extrapolate using first two
@@ -104,5 +110,4 @@ public Pose2d getTargetPose2d() {
     }
     return new double[] {closest.velocity(), closest.hood()};
   }
-
 }
