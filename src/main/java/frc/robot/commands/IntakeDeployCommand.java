@@ -17,7 +17,7 @@ public class IntakeDeployCommand extends Command {
 
   public IntakeDeployCommand(IntakeSubsystem intakeSubsystem) {
     m_IntakeSubsystem = intakeSubsystem;
-    addRequirements(m_IntakeSubsystem);
+    // addRequirements(m_IntakeSubsystem);
   }
 
   // Called when the command is initially scheduled.

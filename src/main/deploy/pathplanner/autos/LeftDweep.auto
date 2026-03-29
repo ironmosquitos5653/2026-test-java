@@ -1,0 +1,49 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Dweep1"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Dweep2"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Dweep3"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ShootTimed"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Dweep4"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ShootTimed"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}

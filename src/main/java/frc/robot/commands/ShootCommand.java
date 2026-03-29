@@ -4,12 +4,7 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.IntakeSubsystem;
@@ -18,7 +13,6 @@ import frc.robot.subsystems.ShooterSubsystem.HoodPosition;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.util.Aimer;
 import frc.robot.util.DistanceCalculator;
-import frc.robot.util.ShootData;
 import frc.robot.util.TurnToPoseController;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
@@ -61,7 +55,7 @@ public class ShootCommand extends Command {
     m_aimer = aimer;
     m_drive = drive;
     m_timed = timed;
-    addRequirements(shooterSubsystem, intakeSubsystem);
+    // addRequirements(shooterSubsystem, intakeSubsystem);
   }
 
   // Called when the command is initially scheduled.
@@ -72,7 +66,7 @@ public class ShootCommand extends Command {
     intakeIn = true;
     timer.reset();
     timer.start();
-    m_aimer.setTarget(m_distanceCalculator.getTargetPose2d());
+    m_aimer.setTarget(m_aimer.getTargetPose());
     System.out.println("SHOOTING!!!");
     System.out.println("RainAndWalterAreAWESOME");
   }
@@ -81,25 +75,23 @@ public class ShootCommand extends Command {
   @Override
   public void execute() {
 
-    double[] newCalculations = m_distanceCalculator.getVelocityAndHood();
+    double[] calculations = m_distanceCalculator.getVelocityAndHood();
 
-    double[] calculations = getVelocityAndHood(m_drive);
     double velocity = calculations[0];
     double hood = calculations[1];
 
-    SmartDashboard.putNumber("oldV", calculations[0]);
-    SmartDashboard.putNumber("oldH", calculations[1]);
-    SmartDashboard.putNumber("newV", newCalculations[0]);
-    SmartDashboard.putNumber("newH", newCalculations[1]);
+    if (m_timed) {
+      aim();
+    }
 
-    /*
     setHood(hood);
     setShootSpeed(velocity);
 
+    jiggleIntake();
+
     if (m_ShooterSubsystem.getVelocity() < -velocity * .90) {
       m_ShooterSubsystem.setAdvanceSpeed(1);
-      jiggleIntake();
-    } */
+    }
   }
 
   // Called once the command ends or is interrupted.
@@ -126,6 +118,7 @@ public class ShootCommand extends Command {
     // double omega = m_drive.getTurnToPoseOutput(m_distanceCalculator.getTargetPose2d(),
     // turnController);
     // m_drive.runVelocity(new ChassisSpeeds(0.0, 0.0, -omega));
+    m_drive.runVelocity(new ChassisSpeeds(0.0, 0.0, -m_aimer.calculate()));
   }
 
   public void setHood(double position) {
@@ -175,84 +168,4 @@ public class ShootCommand extends Command {
       m_IntakeSubsystem.setDeploySpeed(-.4);
     }
   }
-
-  public static double getDistance(Drive drive) {
-    return drive.getPose().getTranslation().getDistance(getTargetPose2d().getTranslation());
-  }
-
-    public static Pose2d redTarget = new Pose2d(new Translation2d(11.9, 4.0), new Rotation2d(0));
-  public static Pose2d blueTarget = new Pose2d(new Translation2d(4.6, 4.0), new Rotation2d(0));
-  
-  public static Pose2d getTargetPose2d() {
-    if (DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red) {
-      return redTarget;
-    }
-    return blueTarget;
-  }
-
-    public static double[] getVelocityAndHood(Drive drive) {
-    double distance = getDistance(drive);
-    return getVelocityAndHood(distance);
-  }
-
-  public static double[] getVelocityAndHood(double distance) {
-    // Use shootDatas to interpolate (or extrapolate) velocity and hood
-    ShootData[] data = shootDatas;
-
-    // If distance is below the first entry, extrapolate using first two
-    if (distance <= data[0].distance()) {
-      ShootData a = data[0];
-      ShootData b = data[1];
-      double t = (distance - a.distance()) / (b.distance() - a.distance());
-      if (Double.isNaN(t) || Double.isInfinite(t)) t = 0.0;
-      double vel = a.velocity() + t * (b.velocity() - a.velocity());
-      double hood = a.hood() + t * (b.hood() - a.hood());
-      return new double[] {vel, hood};
-    }
-
-    // If distance is above the last entry, extrapolate using last two
-    int last = data.length - 1;
-    if (distance >= data[last].distance()) {
-      ShootData a = data[last - 1];
-      ShootData b = data[last];
-      double t = (distance - a.distance()) / (b.distance() - a.distance());
-      if (Double.isNaN(t) || Double.isInfinite(t)) t = 0.0;
-      double vel = a.velocity() + t * (b.velocity() - a.velocity());
-      double hood = a.hood() + t * (b.hood() - a.hood());
-      return new double[] {vel, hood};
-    }
-
-    // Otherwise find the interval [i, i+1] that contains distance
-    for (int i = 0; i < data.length - 1; i++) {
-      ShootData a = data[i];
-      ShootData b = data[i + 1];
-      if (distance >= a.distance() && distance <= b.distance()) {
-        double t = (distance - a.distance()) / (b.distance() - a.distance());
-        if (Double.isNaN(t) || Double.isInfinite(t)) t = 0.0;
-        double vel = a.velocity() + t * (b.velocity() - a.velocity());
-        double hood = a.hood() + t * (b.hood() - a.hood());
-        return new double[] {vel, hood};
-      }
-    }
-
-    // Fallback (shouldn't happen): return closest
-    ShootData closest = data[0];
-    double bestDiff = Math.abs(distance - closest.distance());
-    for (ShootData sd : data) {
-      double diff = Math.abs(distance - sd.distance());
-      if (diff < bestDiff) {
-        closest = sd;
-        bestDiff = diff;
-      }
-    }
-    return new double[] {closest.velocity(), closest.hood()};
-  }
-
-  private static final ShootData[] shootDatas =
-      new ShootData[] {
-        new ShootData(.6, 3000, 0.032),
-        new ShootData(2.18, 3100, 0.05),
-        new ShootData(3.46, 3425, 0.067),
-        new ShootData(5.0, 3855, 0.085)
-      };
 }

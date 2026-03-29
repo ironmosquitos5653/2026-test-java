@@ -37,7 +37,7 @@ public class ShooterSubsystem extends SubsystemBase {
     DOWN(0.019),
     DEPLOY_CLIMB(.165),
     CLIMB(.056),
-    MAX(0);
+    MAX(0.165);
 
     public final double value;
 
@@ -60,7 +60,7 @@ public class ShooterSubsystem extends SubsystemBase {
     fws2 = new FlywheelSubsystem(shooter2Motor);
     fws3 = new FlywheelSubsystem(shooter3Motor);
 
-    hoodEncoderPidController = new PIDController(12, 0, .5);
+    hoodEncoderPidController = new PIDController(25, 0, .5);
     hoodEncoderPidController.enableContinuousInput(0, 1);
 
     hoodEncoder = hoodRotateMotor.getAbsoluteEncoder();
@@ -75,7 +75,6 @@ public class ShooterSubsystem extends SubsystemBase {
     hoodEncoderPidController.setSetpoint(hoodPosition);
     double speed = hoodEncoderPidController.calculate(hoodEncoder.getPosition());
     hoodRotateMotor.set(speed);
-    SmartDashboard.putNumber("HoodSpeed", speed);
     SmartDashboard.putNumber("Hood Encoder", hoodEncoder.getPosition());
   }
 

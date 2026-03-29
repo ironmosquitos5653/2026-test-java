@@ -4,7 +4,6 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
@@ -26,32 +25,17 @@ public class SimpleShootCommand extends Command {
       Drive drive,
       double velocity,
       double hoodPosition) {
-    m_ShooterSubsystem = shooterSubsystem;
-    m_IntakeSubsystem = intakeSubsystem;
-    m_drive = drive;
-    addRequirements(m_ShooterSubsystem, m_IntakeSubsystem, m_drive);
-    m_velocity = velocity;
-    m_hoodPosition = hoodPosition;
+
+    // addRequirements(shooterSubsystem, intakeSubsystem);
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {
-    m_drive.stopWithX();
-  }
+  public void initialize() {}
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {
-    setHood(m_hoodPosition);
-
-    setShootSpeed(m_velocity);
-
-    if (m_ShooterSubsystem.getVelocity() < -m_velocity * .90) {
-      m_ShooterSubsystem.setAdvanceSpeed(1);
-      jiggleIntake();
-    }
-  }
+  public void execute() {}
 
   // Called once the command ends or is interrupted.
   @Override
@@ -65,58 +49,6 @@ public class SimpleShootCommand extends Command {
 
   @Override
   public boolean isFinished() {
-    return false;
-  }
-
-  public void setHood(double position) {
-    m_ShooterSubsystem.setHoodPosition(position);
-  }
-
-  public void setShootSpeed(double velocity) {
-    m_ShooterSubsystem.setShootSpeed(velocity);
-  }
-
-  private Timer intakeTimer;
-  private boolean intakeIn;
-  private boolean intakeOn = false;
-
-  private void jiggleIntake() {
-
-    if (!intakeOn) {
-      if (intakeTimer == null) {
-        intakeTimer = new Timer();
-        intakeTimer.start();
-      }
-
-      if (intakeTimer.hasElapsed(1)) {
-        intakeOn = true;
-        intakeTimer.reset();
-        intakeTimer.start();
-      } else {
-        return;
-      }
-    }
-
-    if (intakeTimer == null) {
-      intakeTimer = new Timer();
-      intakeTimer.start();
-    }
-    m_IntakeSubsystem.setIntakeSpeed(-1);
-
-    if (intakeIn && intakeTimer.hasElapsed(.5)) {
-      intakeIn = false;
-      intakeTimer.reset();
-      intakeTimer.start();
-    } else if (!intakeIn && intakeTimer.hasElapsed(.25)) {
-      intakeIn = true;
-      intakeTimer.reset();
-      intakeTimer.start();
-    }
-
-    if (intakeIn) {
-      m_IntakeSubsystem.setDeploySpeed(.4);
-    } else {
-      m_IntakeSubsystem.setDeploySpeed(-.4);
-    }
+    return true;
   }
 }
