@@ -26,10 +26,22 @@ public class ShootCommand extends Command {
   private boolean m_timed;
 
   Timer timer = new Timer();
+  Timer stuckTimer = null;
   private Timer intakeTimer;
   private boolean intakeIn;
   private boolean intakeOn = false;
   private double m_shootTime = 6;
+  boolean shooting = false;
+
+  // Progressing is Start -> Delayed -> Watching -> Reversing -> Delayed ...
+  private enum StuckState {
+    START, // Starting up, indexer not enabled.
+    DELAYED, // Delayed because indexer just started.
+    WATCHING, // Watching for stuck condition.
+    REVERSING // Reversing because stuck condition met.
+  }
+
+  private StuckState stuckState = StuckState.START;
 
   public ShootCommand(
       ShooterSubsystem shooterSubsystem,
@@ -62,8 +74,10 @@ public class ShootCommand extends Command {
   @Override
   public void initialize() {
     intakeTimer = null;
+    stuckTimer = null;
     intakeOn = false;
     intakeIn = true;
+    shooting = false;
     timer.reset();
     timer.start();
     m_aimer.setTarget(m_aimer.getTargetPose());
@@ -89,8 +103,15 @@ public class ShootCommand extends Command {
 
     jiggleIntake();
 
-    if (m_ShooterSubsystem.getVelocity() < -velocity * .90) {
-      m_ShooterSubsystem.setAdvanceSpeed(1);
+    if (shooting || m_ShooterSubsystem.getVelocity() < -velocity * .90) {
+      shooting = true;
+      if (stuckState == StuckState.START) {
+        stuckState = StuckState.DELAYED;
+      }
+
+      if (! stuck()) {
+        m_ShooterSubsystem.setAdvanceSpeed(1);
+      }
     }
   }
 
@@ -115,9 +136,6 @@ public class ShootCommand extends Command {
   }
 
   public void aim() {
-    // double omega = m_drive.getTurnToPoseOutput(m_distanceCalculator.getTargetPose2d(),
-    // turnController);
-    // m_drive.runVelocity(new ChassisSpeeds(0.0, 0.0, -omega));
     m_drive.runVelocity(new ChassisSpeeds(0.0, 0.0, -m_aimer.calculate()));
   }
 
@@ -127,6 +145,42 @@ public class ShootCommand extends Command {
 
   public void setShootSpeed(double velocity) {
     m_ShooterSubsystem.setShootSpeed(velocity);
+  }
+
+  private boolean stuck() {
+    if (stuckTimer == null) {
+      stuckTimer = new Timer();
+      stuckTimer.start();
+    }
+
+    // Delayed State prevents us from reporting stuck when indexer is ramping up.
+    if (stuckState == StuckState.DELAYED) {
+      if (stuckTimer.hasElapsed(.5)) {
+        stuckState = StuckState.WATCHING;
+        stuckTimer.reset();
+        stuckTimer.start();
+      } else {
+        return false;
+      }
+    }
+
+    if (stuckState == StuckState.WATCHING && m_ShooterSubsystem.indexStuck()) {
+      stuckState = StuckState.REVERSING;
+      stuckTimer.reset();
+      stuckTimer.start();
+    }
+
+    if (stuckState == StuckState.REVERSING) {
+      if (stuckTimer.hasElapsed(.5)) {
+        stuckState = StuckState.DELAYED;
+        stuckTimer.reset();
+        stuckTimer.start();
+        return false;
+      }
+      m_ShooterSubsystem.setAdvanceSpeed(-1);
+      return true;
+    }
+    return false;
   }
 
   private void jiggleIntake() {

@@ -60,7 +60,7 @@ public class ShooterSubsystem extends SubsystemBase {
     fws2 = new FlywheelSubsystem(shooter2Motor);
     fws3 = new FlywheelSubsystem(shooter3Motor);
 
-    hoodEncoderPidController = new PIDController(25, 0, .5);
+    hoodEncoderPidController = new PIDController(12, 0, .5);
     hoodEncoderPidController.enableContinuousInput(0, 1);
 
     hoodEncoder = hoodRotateMotor.getAbsoluteEncoder();
@@ -106,6 +106,14 @@ public class ShooterSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("RPM 1 start", shooter1Motor.getEncoder().getVelocity());
     SmartDashboard.putNumber("RPM 2 start", shooter2Motor.getEncoder().getVelocity());
     SmartDashboard.putNumber("RPM 3 start", shooter3Motor.getEncoder().getVelocity());
+  }
+
+  public boolean indexStuck() {
+    return
+      (advance1Motor.getEncoder().getVelocity()  < 100 &&
+          advance1Motor.getEncoder().getVelocity() > -100) ||
+      (advance2Motor.getEncoder().getVelocity() < 100 &&
+          advance2Motor.getEncoder().getVelocity() > -100);
   }
 
   public double getVelocity() {
