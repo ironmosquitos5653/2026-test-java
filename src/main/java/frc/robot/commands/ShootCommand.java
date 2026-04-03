@@ -104,14 +104,8 @@ public class ShootCommand extends Command {
     jiggleIntake();
 
     if (shooting || m_ShooterSubsystem.getVelocity() < -velocity * .90) {
+      m_ShooterSubsystem.setAdvanceSpeed(1);
       shooting = true;
-      if (stuckState == StuckState.START) {
-        stuckState = StuckState.DELAYED;
-      }
-
-      if (! stuck()) {
-        m_ShooterSubsystem.setAdvanceSpeed(1);
-      }
     }
   }
 
@@ -136,6 +130,7 @@ public class ShootCommand extends Command {
   }
 
   public void aim() {
+    
     m_drive.runVelocity(new ChassisSpeeds(0.0, 0.0, -m_aimer.calculate()));
   }
 

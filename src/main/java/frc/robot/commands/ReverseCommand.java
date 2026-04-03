@@ -31,6 +31,7 @@ public class ReverseCommand extends Command {
   @Override
   public void end(boolean interrupted) {
     m_ShooterSubsystem.setAdvanceSpeed(0);
+    m_ShooterSubsystem.setShootSpeed(0);
   }
 
   // Returns true when the command should end.

@@ -76,6 +76,11 @@ public class ShooterSubsystem extends SubsystemBase {
     double speed = hoodEncoderPidController.calculate(hoodEncoder.getPosition());
     hoodRotateMotor.set(speed);
     SmartDashboard.putNumber("Hood Encoder", hoodEncoder.getPosition());
+    boolean hasHood = hoodEncoder.getPosition() != 0;
+    SmartDashboard.putBoolean("HoodON", hasHood);
+    if (!hasHood) {
+      System.out.println("HoodOff");
+    }
   }
 
   public void setShootSpeed(double speed) {
@@ -109,11 +114,10 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   public boolean indexStuck() {
-    return
-      (advance1Motor.getEncoder().getVelocity()  < 100 &&
-          advance1Motor.getEncoder().getVelocity() > -100) ||
-      (advance2Motor.getEncoder().getVelocity() < 100 &&
-          advance2Motor.getEncoder().getVelocity() > -100);
+    return (advance1Motor.getEncoder().getVelocity() < 100
+            && advance1Motor.getEncoder().getVelocity() > -100)
+        || (advance2Motor.getEncoder().getVelocity() < 100
+            && advance2Motor.getEncoder().getVelocity() > -100);
   }
 
   public double getVelocity() {
