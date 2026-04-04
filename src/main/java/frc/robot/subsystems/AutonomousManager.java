@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.commands.FirstShootCommand;
 import frc.robot.commands.IntakeDeployCommand;
+import frc.robot.commands.ReverseCommand;
 import frc.robot.commands.ShootCommand;
 import frc.robot.commands.SimpleShootAndIntakeCommand;
 import frc.robot.subsystems.drive.Drive;
@@ -79,6 +80,7 @@ public class AutonomousManager {
         "Climb", Commands.runOnce(() -> m_ShooterSubsystem.setHoodPosition(0), m_ShooterSubsystem));
 
     new EventTrigger("IntakeOn").onTrue(new IntakeDeployCommand(m_IntakeSubsystem));
+    new EventTrigger("Reverse").onTrue(new ReverseCommand(m_ShooterSubsystem, true));
   }
 
   private void register(String name, Command command) {

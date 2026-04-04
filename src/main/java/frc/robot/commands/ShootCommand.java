@@ -130,7 +130,7 @@ public class ShootCommand extends Command {
   }
 
   public void aim() {
-    
+
     m_drive.runVelocity(new ChassisSpeeds(0.0, 0.0, -m_aimer.calculate()));
   }
 
