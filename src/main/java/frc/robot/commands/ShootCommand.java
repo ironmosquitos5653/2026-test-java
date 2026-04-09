@@ -100,8 +100,14 @@ public class ShootCommand extends Command {
 
     setHood(hood);
     setShootSpeed(velocity);
-
-    jiggleIntake();
+    
+    if(!timer.hasElapsed(3)){
+      m_IntakeSubsystem.setDeploySpeed(.1);
+    }else{
+      m_IntakeSubsystem.setDeploySpeed(0);
+    }
+    
+   // jiggleIntake();
 
     if (shooting || m_ShooterSubsystem.getVelocity() < -velocity * .90) {
       m_ShooterSubsystem.setAdvanceSpeed(1);

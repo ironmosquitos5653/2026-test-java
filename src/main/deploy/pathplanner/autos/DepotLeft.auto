@@ -1,0 +1,49 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "DepotL1"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "DepotL2"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ShootTimed"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "DepotL3"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "DepotL4"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ShootTimed"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}
