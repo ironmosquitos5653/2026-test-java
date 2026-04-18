@@ -10,6 +10,7 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import org.littletonrobotics.junction.AutoLogOutput;
 
 public class ShooterSubsystem extends SubsystemBase {
 
@@ -81,8 +82,11 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   public void setAdvanceSpeed(double speed) {
-    advance1Motor.set(speed);
     advance2Motor.set(speed);
+  }
+
+  public void setOuterAdvanceSpeed(double speed) {
+    advance1Motor.set(speed);
   }
 
   public void setHoodPosition(HoodPosition position) {
@@ -90,11 +94,23 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   public void setHoodPosition(double position) {
+    position = position + -.008;
+    SmartDashboard.putString(
+        "more hood",
+        "  "
+            + position
+            + " X "
+            + HoodPosition.DOWN.value
+            + " X "
+            + (position - HoodPosition.DOWN.value)
+            + " X "
+            + (position < HoodPosition.DOWN.value));
+
     // do not let it go below bottom.
-    if (hoodPosition < HoodPosition.DOWN.value) {
+    if (position < HoodPosition.DOWN.value) {
       position = HoodPosition.DOWN.value;
     }
-
+    SmartDashboard.putNumber("expectedHood", position);
     hoodPosition = position;
   }
 
@@ -109,6 +125,7 @@ public class ShooterSubsystem extends SubsystemBase {
             && advance2Motor.getEncoder().getVelocity() > -100);
   }
 
+  @AutoLogOutput(key = "Shooter/RPM")
   public double getVelocity() {
     return shooter1Motor.getEncoder().getVelocity();
   }

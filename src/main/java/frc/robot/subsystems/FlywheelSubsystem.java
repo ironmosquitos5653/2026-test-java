@@ -6,7 +6,9 @@ package frc.robot.subsystems;
 
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkFlex;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import org.littletonrobotics.junction.AutoLogOutput;
 
 public class FlywheelSubsystem extends SubsystemBase {
 
@@ -23,7 +25,9 @@ public class FlywheelSubsystem extends SubsystemBase {
 
   // Tuning: kP is (percent output) per RPM when using percent control,
   // or (volts) per RPM when using voltage control with setVoltage().
-  private double kP = 0.004; // example: 0.0005 percent-per-RPM (tune)
+  private double kP = 0.005; // example: 0.0005 percent-per-RPM (tune)
+  private double kP2 = 0.02; // example: 0.0005 percent-per-RPM (tune)
+
   private double kFF =
       1.05 * 12.0
           / 6784; // example feed-forward: fraction-per-RPM (for NEO maxRPM=5676). Use 12/5676 if
@@ -63,6 +67,7 @@ public class FlywheelSubsystem extends SubsystemBase {
 
     double currentRPM = getCurrentRPM();
     double error = targetRPM - currentRPM;
+    SmartDashboard.putNumber("TargetRpm", targetRPM);
 
     // Compute controller output
     // If using percent output control: kP and kFF are fractions (-1..1)
@@ -72,10 +77,21 @@ public class FlywheelSubsystem extends SubsystemBase {
     if (useVoltageControl) {
       // Example: kP (volts per RPM), kFF (volts per RPM)
       double pTerm = kP * error; // volts
+      double pTerm2 = 0;
+      if (targetRPM != 0 && Math.abs(error) < Math.abs(.25 * targetRPM)) {
+        pTerm2 = kP2 * error;
+        System.out.println(pTerm2);
+        SmartDashboard.putNumber("Bonuse P", pTerm2);
+      }
+      if (targetRPM == 0) {
+        pTerm = 0;
+      }
       double ffTerm = kFF * targetRPM; // volts
-      double volts = pTerm + ffTerm;
+      double volts = pTerm + ffTerm + pTerm2;
+      SmartDashboard.putNumber("volts", volts);
       // Clamp to allowed voltage range (-12..12)
       volts = Math.max(-12.0, Math.min(12.0, volts));
+      voltage = volts;
       // Apply voltage (if your API supports it). Example for SparkMax/WPILib:
       flyWheelMotor.setVoltage(volts);
       // flyWheelMotor.setVoltage(VoltageSupply.getVoltage() == 0 ? 0 : volts); // adapt as needed
@@ -96,5 +112,12 @@ public class FlywheelSubsystem extends SubsystemBase {
       // Apply to motor
       flyWheelMotor.set(output);
     }
+  }
+
+  double voltage = 0;
+
+  @AutoLogOutput(key = "Shooter/Voltage")
+  public double getVoltage() {
+    return voltage;
   }
 }

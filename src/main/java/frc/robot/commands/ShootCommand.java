@@ -6,6 +6,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
@@ -91,27 +92,41 @@ public class ShootCommand extends Command {
 
     double[] calculations = m_distanceCalculator.getVelocityAndHood();
 
+    // distance = 3.9
+    // rpm = 3300 hood = .08
+
+    // distance = 2.09
+    // rpm = 3100 hood = .05
+
+    // distance= 5
+    // rpm = 3855 hood = .085
+
     double velocity = calculations[0];
     double hood = calculations[1];
-
+    SmartDashboard.putNumber("The hood", hood);
     if (m_timed) {
       aim();
     }
 
     setHood(hood);
     setShootSpeed(velocity);
-    
-    if(!timer.hasElapsed(3)){
-      m_IntakeSubsystem.setDeploySpeed(.1);
-    }else{
-      m_IntakeSubsystem.setDeploySpeed(0);
-    }
-    
-   // jiggleIntake();
 
-    if (shooting || m_ShooterSubsystem.getVelocity() < -velocity * .90) {
+    // jiggleIntake();
+
+    if (shooting || m_ShooterSubsystem.getVelocity() < -velocity * 1) {
+      m_ShooterSubsystem.setOuterAdvanceSpeed(.6);
       m_ShooterSubsystem.setAdvanceSpeed(1);
+      if (!shooting) {
+        SmartDashboard.putNumber("Startup", timer.get());
+      }
       shooting = true;
+      if (!timer.hasElapsed(6)) {
+        m_IntakeSubsystem.setDeploySpeed(.15);
+        m_IntakeSubsystem.setIntakeSpeed(-1);
+      } else {
+        m_IntakeSubsystem.setDeploySpeed(0);
+        m_IntakeSubsystem.setIntakeSpeed(0);
+      }
     }
   }
 
@@ -120,6 +135,7 @@ public class ShootCommand extends Command {
   public void end(boolean interrupted) {
     m_ShooterSubsystem.setShootSpeed(0);
     m_ShooterSubsystem.setAdvanceSpeed(0);
+    m_ShooterSubsystem.setOuterAdvanceSpeed(0);
     m_IntakeSubsystem.setDeploySpeed(0);
     m_IntakeSubsystem.setIntakeSpeed(0);
     m_ShooterSubsystem.setHoodPosition(HoodPosition.DOWN);
@@ -145,6 +161,7 @@ public class ShootCommand extends Command {
   }
 
   public void setShootSpeed(double velocity) {
+    SmartDashboard.putNumber("velocity", velocity);
     m_ShooterSubsystem.setShootSpeed(velocity);
   }
 

@@ -31,7 +31,7 @@ public class IntakeDeployCommand extends Command {
   @Override
   public void execute() {
 
-    m_IntakeSubsystem.setDeploySpeed(-.25);
+    m_IntakeSubsystem.setDeploySpeed(-1);
     m_IntakeSubsystem.setIntakeSpeed(-1);
   }
 
@@ -44,6 +44,6 @@ public class IntakeDeployCommand extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return timer.hasElapsed(1);
+    return timer.hasElapsed(.25);
   }
 }
