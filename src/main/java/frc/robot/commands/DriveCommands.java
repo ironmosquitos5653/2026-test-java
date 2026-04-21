@@ -43,6 +43,8 @@ public class DriveCommands {
   private static final double WHEEL_RADIUS_MAX_VELOCITY = 0.25; // Rad/Sec
   private static final double WHEEL_RADIUS_RAMP_RATE = 0.05; // Rad/Sec^2
 
+  public static boolean m_xWheels = false;
+
   private DriveCommands() {}
 
   private static Translation2d getLinearVelocityFromJoysticks(double x, double y) {
@@ -70,6 +72,10 @@ public class DriveCommands {
       Aimer aimer) {
     return Commands.run(
         () -> {
+          if (m_xWheels) {
+            drive.stopWithX();
+            return;
+          }
           // Get linear velocity
           Translation2d linearVelocity =
               getLinearVelocityFromJoysticks(xSupplier.getAsDouble(), ySupplier.getAsDouble());

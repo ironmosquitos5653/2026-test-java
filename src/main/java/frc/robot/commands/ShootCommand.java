@@ -114,7 +114,7 @@ public class ShootCommand extends Command {
     // jiggleIntake();
 
     if (shooting || m_ShooterSubsystem.getVelocity() < -velocity * 1) {
-      m_ShooterSubsystem.setOuterAdvanceSpeed(.6);
+      m_ShooterSubsystem.setOuterAdvanceSpeed(1);
       m_ShooterSubsystem.setAdvanceSpeed(1);
       if (!shooting) {
         SmartDashboard.putNumber("Startup", timer.get());

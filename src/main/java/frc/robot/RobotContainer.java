@@ -21,6 +21,7 @@ import frc.robot.commands.IntakeToggleCommad;
 import frc.robot.commands.ReverseCommand;
 import frc.robot.commands.ShootCommand;
 import frc.robot.commands.SimpleShootCommand;
+import frc.robot.commands.XWheelsCommand;
 import frc.robot.subsystems.AutonomousManager;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.PhotonVisionSubsystem;
@@ -151,7 +152,7 @@ public class RobotContainer {
     controller.y().whileTrue(new AimCommand(drive));
     controller.povDown().whileTrue(new ReverseCommand(shooterSubsystem));
 
-    controller2.x().whileTrue(Commands.run(() -> drive.stopWithX(), drive));
+    controller2.x().whileTrue(new XWheelsCommand());
     controller2
         .a()
         .whileTrue(new SimpleShootCommand(shooterSubsystem, intakeSubsystem, drive, 3000, 0.032));
