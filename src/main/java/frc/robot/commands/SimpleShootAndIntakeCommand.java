@@ -94,10 +94,10 @@ public class SimpleShootAndIntakeCommand extends Command {
     m_ShooterSubsystem.setShootSpeed(velocity);
   }
 
-  private Pose2d blueLeft = new Pose2d(.5, 7, null);
-  private Pose2d blueRight = new Pose2d(.5, 1, null);
-  private Pose2d redLeft = new Pose2d(16, 1, null);
-  private Pose2d redRight = new Pose2d(16, 7, null);
+  private Pose2d blueLeft = new Pose2d(.5, 6.5, null);
+  private Pose2d blueRight = new Pose2d(.5, 1.5, null);
+  private Pose2d redLeft = new Pose2d(16, 1.5, null);
+  private Pose2d redRight = new Pose2d(16, 6.5, null);
 
   public Pose2d getTargetPose() {
     if (m_shootAtHub) {

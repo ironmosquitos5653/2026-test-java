@@ -119,13 +119,16 @@ public class ShootCommand extends Command {
         delay = timer.get();
       } else if (delay != 0 && timer.hasElapsed(0 + delay)) {
 
-        m_ShooterSubsystem.setOuterAdvanceSpeed(1);
+        // Out advance motor speed.
+        m_ShooterSubsystem.setOuterAdvanceSpeed(.75);
         m_ShooterSubsystem.setAdvanceSpeed(1);
         if (!shooting) {
           SmartDashboard.putNumber("Startup", timer.get());
         }
         shooting = true;
-        if (timer.hasElapsed(1) && !timer.hasElapsed(3)) {
+        // time to wait to put intake in
+        if (timer.hasElapsed(2.5) && !timer.hasElapsed(6)) {
+          // Intake deploy motor speed
           m_IntakeSubsystem.setDeploySpeed(.4);
           m_IntakeSubsystem.setIntakeSpeed(-1);
         } else {

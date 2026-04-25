@@ -34,10 +34,10 @@ public class Aimer {
     return turnController.calculate(m_drive.getPose(), target);
   }
 
-  private Pose2d blueLeft = new Pose2d(.5, 7.5, null);
-  private Pose2d blueRight = new Pose2d(.5, 0.5, null);
-  private Pose2d redLeft = new Pose2d(16, .5, null);
-  private Pose2d redRight = new Pose2d(16, 7.5, null);
+  private Pose2d blueLeft = new Pose2d(.5, 7, null);
+  private Pose2d blueRight = new Pose2d(.5, 1, null);
+  private Pose2d redLeft = new Pose2d(16, 1, null);
+  private Pose2d redRight = new Pose2d(16, 7, null);
 
   public boolean isBackField() {
     Pose2d currentPose2d = m_drive.getPose();
