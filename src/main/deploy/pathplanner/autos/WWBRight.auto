@@ -11,6 +11,12 @@
           }
         },
         {
+          "type": "path",
+          "data": {
+            "pathName": "RightWithBump1"
+          }
+        },
+        {
           "type": "wait",
           "data": {
             "waitTime": 5.0
@@ -19,13 +25,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "RightWithBump1"
+            "pathName": "RightsWithBump2"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "RightsWithBump2"
+            "pathName": "RightWithBump3"
           }
         },
         {

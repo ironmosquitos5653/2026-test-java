@@ -6,6 +6,7 @@ package frc.robot.subsystems;
 
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkFlex;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.littletonrobotics.junction.AutoLogOutput;
@@ -26,7 +27,7 @@ public class FlywheelSubsystem extends SubsystemBase {
   // Tuning: kP is (percent output) per RPM when using percent control,
   // or (volts) per RPM when using voltage control with setVoltage().
   private double kP = 0.005; // example: 0.0005 percent-per-RPM (tune)
-  private double kP2 = 0.02; // example: 0.0005 percent-per-RPM (tune)
+  private double kP2 = 0.005; // example: 0.0005 percent-per-RPM (tune)
 
   private double kFF =
       1.05 * 12.0
@@ -64,6 +65,9 @@ public class FlywheelSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     super.periodic();
+    double p = SmartDashboard.getNumber("P", 0);
+    double d = SmartDashboard.getNumber("D", 0);
+    PIDController pid = new PIDController(.002, 0, .0001);
 
     double currentRPM = getCurrentRPM();
     double error = targetRPM - currentRPM;
@@ -76,10 +80,12 @@ public class FlywheelSubsystem extends SubsystemBase {
     double output;
     if (useVoltageControl) {
       // Example: kP (volts per RPM), kFF (volts per RPM)
-      double pTerm = kP * error; // volts
+      double pTerm = -pid.calculate(error);
+      // kP * error; // volts
       double pTerm2 = 0;
       if (targetRPM != 0 && Math.abs(error) < Math.abs(.25 * targetRPM)) {
-        pTerm2 = kP2 * error;
+        pTerm2 = 0;
+        // kP2 * error;
         System.out.println(pTerm2);
         SmartDashboard.putNumber("Bonuse P", pTerm2);
       }

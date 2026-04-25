@@ -25,6 +25,7 @@ public class ShootCommand extends Command {
   DistanceCalculator m_distanceCalculator;
   Aimer m_aimer;
   private boolean m_timed;
+  private double delay = 0;
 
   Timer timer = new Timer();
   Timer stuckTimer = null;
@@ -114,18 +115,23 @@ public class ShootCommand extends Command {
     // jiggleIntake();
 
     if (shooting || m_ShooterSubsystem.getVelocity() < -velocity * 1) {
-      m_ShooterSubsystem.setOuterAdvanceSpeed(1);
-      m_ShooterSubsystem.setAdvanceSpeed(1);
-      if (!shooting) {
-        SmartDashboard.putNumber("Startup", timer.get());
-      }
-      shooting = true;
-      if (!timer.hasElapsed(6)) {
-        m_IntakeSubsystem.setDeploySpeed(.15);
-        m_IntakeSubsystem.setIntakeSpeed(-1);
-      } else {
-        m_IntakeSubsystem.setDeploySpeed(0);
-        m_IntakeSubsystem.setIntakeSpeed(0);
+      if (delay == 0) {
+        delay = timer.get();
+      } else if (delay != 0 && timer.hasElapsed(0 + delay)) {
+
+        m_ShooterSubsystem.setOuterAdvanceSpeed(1);
+        m_ShooterSubsystem.setAdvanceSpeed(1);
+        if (!shooting) {
+          SmartDashboard.putNumber("Startup", timer.get());
+        }
+        shooting = true;
+        if (timer.hasElapsed(1) && !timer.hasElapsed(3)) {
+          m_IntakeSubsystem.setDeploySpeed(.4);
+          m_IntakeSubsystem.setIntakeSpeed(-1);
+        } else {
+          m_IntakeSubsystem.setDeploySpeed(0);
+          m_IntakeSubsystem.setIntakeSpeed(0);
+        }
       }
     }
   }

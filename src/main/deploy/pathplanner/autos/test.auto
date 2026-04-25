@@ -7,13 +7,19 @@
         {
           "type": "path",
           "data": {
-            "pathName": "DepotL1"
+            "pathName": "Dweep1"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "DepotL2"
+            "pathName": "Dweep2"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "dweeptest"
           }
         },
         {
@@ -25,19 +31,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "DepotL3"
+            "pathName": "dweeptest2"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "DepotL4"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "ShootTimed"
+            "pathName": "dweeptest3"
           }
         }
       ]

@@ -8,36 +8,20 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.397807692307696,
-        "y": 0.6
+        "x": 5.828076923076924,
+        "y": 0.5697948717948724
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 5.8164487179487185,
-        "y": 0.7674743589743582
-      },
-      "prevControl": {
-        "x": 5.3513205128205135,
-        "y": 0.5697948717948702
-      },
-      "nextControl": {
-        "x": 6.416608683152894,
-        "y": 1.0225423441861339
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 7.107179487179488,
+        "x": 7.118807692307694,
         "y": 1.3372564102564115
       },
       "prevControl": {
-        "x": 6.281576923076924,
-        "y": 0.907012820512821
+        "x": 6.479256410256411,
+        "y": 0.5930512820512818
       },
       "nextControl": null,
       "isLocked": false,
@@ -50,7 +34,7 @@
   "eventMarkers": [
     {
       "name": "IntakeOn",
-      "waypointRelativePos": 0.3898117386489525,
+      "waypointRelativePos": 0.2,
       "endWaypointRelativePos": null,
       "command": null
     }

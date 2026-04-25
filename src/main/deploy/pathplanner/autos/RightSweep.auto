@@ -31,7 +31,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Sweep4"
+            "pathName": "sweep4"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "sweep5"
           }
         },
         {

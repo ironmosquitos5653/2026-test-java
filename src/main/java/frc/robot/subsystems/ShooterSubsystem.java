@@ -60,6 +60,8 @@ public class ShooterSubsystem extends SubsystemBase {
     hoodEncoderPidController.enableContinuousInput(0, 1);
 
     hoodEncoder = hoodRotateMotor.getAbsoluteEncoder();
+    SmartDashboard.putNumber("P", 0);
+    SmartDashboard.putNumber("D", 0);
   }
 
   @Override
