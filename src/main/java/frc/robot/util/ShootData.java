@@ -5,9 +5,9 @@ public record ShootData(double distance, double velocity, double hood) {
       new ShootData[] {
         new ShootData(.6, 2600, 0.035),
         new ShootData(2.18, 3000, 0.06),
-        new ShootData(3.46, 3225, 0.073),
-        new ShootData(4, 3350, 0.075),
-        new ShootData(5.0, 3500, 0.105)
+        new ShootData(3.46, 3225, 0.07),
+        new ShootData(4, 3350, 0.078),
+        new ShootData(5.0, 3530, 0.105)
       };
   /*
   public static final ShootData[] oldShootDatas =
